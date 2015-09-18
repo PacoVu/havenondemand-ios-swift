@@ -41,7 +41,7 @@ IODClient class exposes source code so you can modify it as you wish.
             let json = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: &jsonError) as! NSDictionary
             
             var people = ""
-	    var places = ""
+            var places = ""
             if let entities = json["entities"] as? NSArray {
                 for entity in entities {
                     var type = entity.valueForKey("type") as! String;

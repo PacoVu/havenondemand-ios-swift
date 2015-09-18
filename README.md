@@ -36,13 +36,13 @@ IODClient class exposes source code so you can modify it as you wish.
         // implement delegated functions
         func iodClient_requestCompletedWithContent(response:String){
             // response is a json string from server
-	    // use the NSJSONSerialization to parse the response.
+            // use the NSJSONSerialization to parse the response.
 
 	    var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             var jsonError: NSError?
             let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding);
             let json = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: &jsonError) as! NSDictionary
-	    ...
+            ...
         }
         func iodClient_onErrorOccurred(errorMessage:String){ 
             // handle error if any
@@ -79,19 +79,19 @@ IODClient class exposes source code so you can modify it as you wish.
                 println("json error: \(unwrappedError)")
             } else {
                 var jobId = json.valueForKey("jobID") as! String;
-		// get the actual content by this jobID
+                // get the actual content by this jobID
                 iodClient.GetJobResult(jobId);
             }
         }
         func iodClient_requestCompletedWithContent(response:String){
             // response is a json string from server
-	    // use the NSJSONSerialization to parse the response.
+            // use the NSJSONSerialization to parse the response.
 
 	    var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             var jsonError: NSError?
             let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding);
             let json = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: &jsonError) as! NSDictionary
-	    ...
+            ...
         }
         func iodClient_onErrorOccurred(errorMessage:String){ 
             // handle error if any

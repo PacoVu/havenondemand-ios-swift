@@ -35,27 +35,27 @@ IODClient class exposes source code so you can modify it as you wish.
 
         // implement delegated functions
         func iodClient_requestCompletedWithContent(response:String){
-	    var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             var jsonError: NSError?
-            let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+            let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding)
             let json = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: &jsonError) as! NSDictionary
             
             var people = ""
             var places = ""
             if let entities = json["entities"] as? NSArray {
                 for entity in entities {
-                    var type = entity.valueForKey("type") as! String;
-		    if type == "people_eng" {
-                        var normalizedText = entity.valueForKey("normalized_text") as! String;
-                        people += normalizedText + "\n";
+                    var type = entity.valueForKey("type") as! String
+                    if type == "people_eng" {
+                        var normalizedText = entity.valueForKey("normalized_text") as! String
+                        people += normalizedText + "\n"
                         // parse any other interested information about this person ...
                     }
                     else if type == "places_eng" {
-                        var normalizedText = entity.valueForKey("normalized_text") as! String;
-                        places += normalizedText + "\n";
+                        var normalizedText = entity.valueForKey("normalized_text") as! String
+                        places += normalizedText + "\n"
                         // parse any other interested information about this place ...
                     }
-		}
+                }
             }
         }
 
@@ -89,16 +89,15 @@ IODClient class exposes source code so you can modify it as you wish.
         * the jobID and send a request for the actual content identified by the jobID.
         **************************************************************************************/ 
         func iodClient_requestCompletedWithJobID(response:String){ 
-            // response is a json string from server
-	    var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             var jsonError: NSError?
-            let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+            let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding)
             let json = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: &jsonError) as! NSDictionary
         
             if let unwrappedError = jsonError {
                 println("json error: \(unwrappedError)")
             } else {
-                var jobId = json.valueForKey("jobID") as! String;
+                var jobId = json.valueForKey("jobID") as! String
                 // get the actual content by this jobID
                 iodClient.GetJobResult(jobId);
             }
@@ -115,7 +114,7 @@ IODClient class exposes source code so you can modify it as you wish.
             } else {
                 if let actions = json["actions"] as? NSArray {
                     var recognizedText = ""
-                    let action = actions[0].valueForKey("action") as? String;
+                    let action = actions[0].valueForKey("action") as? String
                     if let result = actions[0].valueForKey("result") as? NSDictionary {
                         var textBlocks: NSArray = result.valueForKey("text_block") as! NSArray
                         for block in textBlocks {

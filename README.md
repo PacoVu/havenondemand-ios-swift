@@ -50,8 +50,8 @@ IODClient class exposes source code so you can modify it as you wish.
 *Return: void.*
 
 **Response:**
-* If the mode is “ASYNC”, response will be returned via the requestCompletedWithJobID(String response) callback function.
-* If the mode is “SYNC”, response will be returned via the requestCompletedWithContent(String response) callback function.
+* If the mode is "ASYNC", response will be returned via the requestCompletedWithJobID(String response) callback function.
+* If the mode is "SYNC", response will be returned via the requestCompletedWithContent(String response) callback function.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
 
 ----
@@ -100,25 +100,25 @@ In your class, you will need to inherit the IODClientDelegate protocol and imple
 
     class MyAppClass : IODClientDelegate { 
     
-        func iodClient_requestCompletedWithJobID(response:String){ }
+        func requestCompletedWithJobID(response:String){ }
     
-        func iodClient_requestCompletedWithContent(response:String){ }
+        func requestCompletedWithContent(response:String){ }
     
-        func iodClient_onErrorOccurred(errorMessage:String){ }
+        func onErrorOccurred(errorMessage:String){ }
     
     }
 # 
 When you call the GetRequest() or PostRequest() with the ASYNC mode, the response will be returned to this callback function. The response is a JSON string containing the jobID.
 
-    func iodClient_requestCompletedWithJobID(response:String){ }
+    func requestCompletedWithJobID(response:String){ }
 # 
 When you call the GetRequest() or PostRequest() with the SYNC mode, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
 
-    func iodClient_requestCompletedWithContent(response:String){ }
+    func requestCompletedWithContent(response:String){ }
 # 
 If there is an error occurred, the error message will be returned to this callback function.
 
-    func iodClient_onErrorOccurred(errorMessage:String){ }
+    func onErrorOccurred(errorMessage:String){ }
 
 ----
 ## Demo code 1: 
@@ -140,7 +140,7 @@ If there is an error occurred, the error message will be returned to this callba
         }
 
         // implement delegated functions
-        func iodClient_requestCompletedWithContent(response:String){
+        func requestCompletedWithContent(response:String){
             var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             var jsonError: NSError?
             let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding)
@@ -165,7 +165,7 @@ If there is an error occurred, the error message will be returned to this callba
             }
         }
 
-        func iodClient_onErrorOccurred(errorMessage:String){ 
+        func onErrorOccurred(errorMessage:String){ 
             // handle error if any
         }
     }
@@ -194,7 +194,7 @@ If there is an error occurred, the error message will be returned to this callba
         * An async request will result in a response with a jobID. We parse the response to get
         * the jobID and send a request for the actual content identified by the jobID.
         **************************************************************************************/ 
-        func iodClient_requestCompletedWithJobID(response:String){ 
+        func requestCompletedWithJobID(response:String){ 
             var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             var jsonError: NSError?
             let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding)
@@ -209,7 +209,7 @@ If there is an error occurred, the error message will be returned to this callba
             }
         }
 
-        func iodClient_requestCompletedWithContent(response:String){
+        func requestCompletedWithContent(response:String){
             var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             var jsonError: NSError?
             let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding);
@@ -230,7 +230,7 @@ If there is an error occurred, the error message will be returned to this callba
                 }
             } 
         }
-        func iodClient_onErrorOccurred(errorMessage:String){ 
+        func onErrorOccurred(errorMessage:String){ 
             // handle error if any
         }
     }

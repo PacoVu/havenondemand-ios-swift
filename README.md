@@ -1,8 +1,9 @@
-# IODClient Library for iOS – SWIFT. Version 1.0
+# IODClient Library for iOS – SWIFT. V1.0
 
 ----
 ## Overview
 IODClient for iOS - Swift is a utility class, which helps you easily integrate your iOS app with HP IDOL OnDemand Services.
+
 IODClient class exposes source code so you can modify it as you wish.
 
 ----
@@ -14,7 +15,9 @@ IODClient class exposes source code so you can modify it as you wish.
 
 ----
 
-# Demo code 1: Use the Entity Extraction API to extract people and places from cnn.com website with a GET request
+## Demo code 1: 
+
+**Use the Entity Extraction API to extract people and places from cnn.com website with a GET request**
 
     class MyAppClass : IODClientDelegate { 
         var iodClient:IODClient = IODClient(apiKey: "your-api-key")
@@ -47,7 +50,10 @@ IODClient class exposes source code so you can modify it as you wish.
     }
 
  ----
- # Demo code 2: Use the OCR Document API to recognize text from an image with a POST request
+
+ ## Demo code 2:
+ 
+ **Use the OCR Document API to recognize text from an image with a POST request**
 
     class MyAppClass : IODClientDelegate { 
         var iodClient:IODClient = IODClient(apiKey: "your-api-key");
@@ -93,5 +99,5 @@ IODClient class exposes source code so you can modify it as you wish.
     }
 
 ----
-# License
+## License
 Licensed under the MIT License.

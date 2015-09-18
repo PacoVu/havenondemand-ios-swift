@@ -84,10 +84,10 @@ IODClient class exposes source code so you can modify it as you wish.
 
         // implement delegated functions
 
-        /************************************************************************************************
-	* An async request will result in a response with a jobID. We parse the response to get the jobID 
-        * and send a request for the actual content identified by the jobID.
-	************************************************************************************************/
+        /**************************************************************************************
+        * An async request will result in a response with a jobID. We parse the response to get
+        * the jobID and send a request for the actual content identified by the jobID.
+        **************************************************************************************/ 
         func iodClient_requestCompletedWithJobID(response:String){ 
             // response is a json string from server
 	    var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())

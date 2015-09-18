@@ -22,7 +22,7 @@ IODClient class exposes source code so you can modify it as you wish.
     class MyAppClass : IODClientDelegate { 
         var iodClient:IODClient = IODClient(apiKey: "your-api-key")
         
-	func useIODClient() {
+        func useIODClient() {
             var iodApp = iodClient.iodApps.ENTITY_EXTRACTION
             var params =  Dictionary<String,Object>()
             params["url"] = "http://www.cnn.com"
@@ -49,16 +49,16 @@ IODClient class exposes source code so you can modify it as you wish.
         }
     }
 
- ----
+----
 
- ## Demo code 2:
+## Demo code 2:
  
- **Use the OCR Document API to recognize text from an image with a POST request**
+**Use the OCR Document API to recognize text from an image with a POST request**
 
     class MyAppClass : IODClientDelegate { 
         var iodClient:IODClient = IODClient(apiKey: "your-api-key");
         
-	func useIODClient() {
+        func useIODClient() {
             var iodApp = iodClient.iodApps.OCR_DOCUMENT
             var params =  Dictionary<String,Object>()
             params["file"] = "full/path/filename.jpg"

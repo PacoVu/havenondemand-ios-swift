@@ -16,17 +16,25 @@ IODClient class exposes source code so you can modify it as you wish.
 
 ----
 ## API References
-**IODClient(apiKey:String, version:String = "v1")**
+**Constructor**
+
+    IODClient(apiKey:String, version:String = "v1")
 
 *Description:* 
-* Constructor. Creates and initializes an IODClient object.
+* Creates and initializes an IODClient object.
 
 *Parameters:*
 * apiKey: your developer apikey.
 * version: IDOL OnDemand API version. Currently it only supports version 1. Thus, the default value is "v1".
 
+*Example code:*
+
+    var iodClient:IODClient = IODClient(apiKey: "your-api-key");
+
 ----
-**GetRequest(inout params:Dictionary\<String, AnyObject\>, iodApp:String, requestMode:REQ_MODE = .ASYNC)**
+**Function GetRequest**
+
+    GetRequest(inout params:Dictionary\<String, AnyObject\>, iodApp:String, requestMode:REQ_MODE = .ASYNC)
 
 *Description:* 
 * Sends a GET request to an IDOL OnDemand API.
@@ -54,8 +62,21 @@ IODClient class exposes source code so you can modify it as you wish.
 * If the mode is "SYNC", response will be returned via the requestCompletedWithContent(String response) callback function.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
 
+*Example code:*
+    Call the Entity Extraction API to find people and places from CNN website
+
+    var iodApp = iodClient.iodApps.ENTITY_EXTRACTION;
+    var arrays = Dictionary<String, String>()
+    arrays["entity_type"] = "people_eng,places_eng"
+    var params = Dictionary<String, AnyObject>() 
+    params["url"] = "http://www.cnn.com"
+    params["arrays"] = arrays
+    iodClient.GetRequest(&params, iodApp:iodApp, requestMode: IODClient.REQ_MODE.SYNC);
+
 ----
-**PostRequest(inout params:Dictionary\<String, Object\>, iodApp:String, requestMode:REQ_MODE = .ASYNC)**
+**function PostRequest**
+ 
+    PostRequest(inout params:Dictionary\<String, Object\>, iodApp:String, requestMode:REQ_MODE = .ASYNC)
 
 *Description:* 
 * Sends a POST request to an IDOL OnDemand API.
@@ -77,22 +98,51 @@ IODClient class exposes source code so you can modify it as you wish.
 
 *Return: void.*
 
-**Response:**
+*Response:*
 * If the mode is "ASYNC", response will be returned via the requestCompletedWithJobID(String response) callback function.
 * If the mode is "SYNC", response will be returned via the requestCompletedWithContent(String response) callback function.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
 
+*Example code:*
+    Call the OCR Document API to scan text from an image file
+
+    var iodApp = iodClient.iodApps.OCR_DOCUMENT;
+    var params =  Dictionary<String,Object>()
+    params["file"] = "full/path/filename.jpg"
+    params["mode"] = "document_photo"
+    iodClient.PostRequest(&params, iodApp:iodApp, requestMode: IODClient.REQ_MODE.ASYNC);
+
 ----
-**GetJobResult(String jobID)**
+**Function GetJobResult**
+
+    GetJobResult(String jobID)
 
 *Description:*
 * Sends a request to IDOL OnDemand to retrieve the content identified by the jobID.
 
-**Parameter:**
+*Parameter:*
 * jobID: the job ID returned from an IDOL OnDemand API upon an asynchronous call.
 
-**Response:** 
+*Response:* 
 * Response will be returned via the requestCompletedWithContent(String response)
+
+*Example code:*
+    Parse a JSON string contained a jobID and call the function to get the actual content from IDOL OnDemand server
+
+    func requestCompletedWithJobID(response:String)
+    {
+        var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        var jsonError: NSError?
+        let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+        let json = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: &jsonError) as! NSDictionary
+        
+        if let unwrappedError = jsonError {
+            println("json error: \(unwrappedError)")
+        } else {
+            var jobId = json.valueForKey("jobID") as! String;
+            iodClient.GetJobResult(jobId);
+        }  
+    }
 
 ----
 ## API callback functions
@@ -110,15 +160,24 @@ In your class, you will need to inherit the IODClientDelegate protocol and imple
 # 
 When you call the GetRequest() or PostRequest() with the ASYNC mode, the response will be returned to this callback function. The response is a JSON string containing the jobID.
 
-    func requestCompletedWithJobID(response:String){ }
+    func requestCompletedWithJobID(response:String)
+    { 
+    
+    }
 # 
 When you call the GetRequest() or PostRequest() with the SYNC mode, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
 
-    func requestCompletedWithContent(response:String){ }
+    func requestCompletedWithContent(response:String)
+    { 
+    
+    }
 # 
 If there is an error occurred, the error message will be returned to this callback function.
 
-    func onErrorOccurred(errorMessage:String){ }
+    func onErrorOccurred(errorMessage:String)
+    { 
+    
+    }
 
 ----
 ## Demo code 1: 

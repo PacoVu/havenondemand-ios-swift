@@ -34,7 +34,7 @@ IODClient class exposes source code so you can modify it as you wish.
 ----
 **Function GetRequest**
 
-    GetRequest(inout params:Dictionary\<String, AnyObject\>, iodApp:String, requestMode:REQ_MODE = .ASYNC)
+    GetRequest(inout params:Dictionary<String, AnyObject>, iodApp:String, requestMode:REQ_MODE = .ASYNC)
 
 *Description:* 
 * Sends a GET request to an IDOL OnDemand API.
@@ -76,7 +76,7 @@ IODClient class exposes source code so you can modify it as you wish.
 ----
 **function PostRequest**
  
-    PostRequest(inout params:Dictionary\<String, Object\>, iodApp:String, requestMode:REQ_MODE = .ASYNC)
+    PostRequest(inout params:Dictionary<String, Object>, iodApp:String, requestMode:REQ_MODE = .ASYNC)
 
 *Description:* 
 * Sends a POST request to an IDOL OnDemand API.

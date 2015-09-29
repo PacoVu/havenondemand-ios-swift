@@ -11,7 +11,7 @@ import MobileCoreServices
 protocol IODClientDelegate {
     func requestCompletedWithContent(response:String);
     func requestCompletedWithJobID(response:String);
-    func onErrorOccurred(errorMEssage:String);
+    func onErrorOccurred(errorMessage:String);
 }
 
 
@@ -20,7 +20,7 @@ class IODClient : NSObject
 {
     enum REQ_MODE { case SYNC, ASYNC }
     
-    var delegate: IODClientDelegate! = nil;
+    var delegate: IODClientDelegate?;
     private var _apikey : String = "";
 
     private let _idolBase : String = "https://api.idolondemand.com/1/api/";
@@ -144,7 +144,7 @@ class IODClient : NSObject
                     if err != nil {
                         dispatch_async(dispatch_get_main_queue(), {
                             var errorStr = err?.localizedDescription
-                            self.delegate.requestCompletedWithContent(errorStr! as String)
+                            self.delegate!.requestCompletedWithContent(errorStr! as String)
                         })
                         return nil
                     }
@@ -207,16 +207,16 @@ class IODClient : NSObject
             if (error != nil) {
                 dispatch_async(dispatch_get_main_queue(), {
                     var errorStr:String = error.localizedDescription;
-                    self.delegate.onErrorOccurred(errorStr);
+                    self.delegate!.onErrorOccurred(errorStr);
                 })
             } else {
                 var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
             
                 dispatch_async(dispatch_get_main_queue(), {
                     if (self._getJobID) {
-                        self.delegate.requestCompletedWithJobID(strData! as String);
+                        self.delegate!.requestCompletedWithJobID(strData! as String);
                     } else {
-                        self.delegate.requestCompletedWithContent(strData! as String);
+                        self.delegate!.requestCompletedWithContent(strData! as String);
                     }
                 })
             }

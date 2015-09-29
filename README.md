@@ -149,6 +149,8 @@ IODClient class exposes source code so you can modify it as you wish.
 In your class, you will need to inherit the IODClientDelegate protocol and implement delegated functions to receive responses from the server
 
     class MyAppClass : IODClientDelegate { 
+        
+        iodClient.delegate = self
     
         func requestCompletedWithJobID(response:String){ }
     
@@ -186,7 +188,8 @@ If there is an error occurred, the error message will be returned to this callba
 
     class MyAppClass : IODClientDelegate { 
         var iodClient:IODClient = IODClient(apiKey: "your-api-key")
-        
+        iodClient.delegate = self
+
         func useIODClient() {
             var iodApp = iodClient.iodApps.ENTITY_EXTRACTION
             var params =  Dictionary<String,Object>()
@@ -237,7 +240,8 @@ If there is an error occurred, the error message will be returned to this callba
 
     class MyAppClass : IODClientDelegate { 
         var iodClient:IODClient = IODClient(apiKey: "your-api-key");
-        
+        iodClient.delegate = self
+
         func useIODClient() {
             var iodApp = iodClient.iodApps.OCR_DOCUMENT
             var params =  Dictionary<String,Object>()

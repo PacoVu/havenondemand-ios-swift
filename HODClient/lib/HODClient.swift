@@ -73,12 +73,12 @@ class HODClient : NSObject
                     } else if (key == "arrays") {
                         for (subkey, subvalue) in value as! Dictionary<String, String> {
                             let separator = ",";
-                            let array = subvalue.componentsSeparatedByString(separator);
-                            for item : String in array {
+                            let itemArr = subvalue.componentsSeparatedByString(separator);
+                            for item : String in itemArr {
                                 queryStr += "&";
                                 queryStr += subkey;
                                 queryStr += "=";
-                                queryStr += item;
+                                queryStr += item.trim();
                             }
                         }
                     } else {
@@ -166,11 +166,11 @@ class HODClient : NSObject
                 } else if (key == "arrays") {
                     for (subkey, subvalue) in value as! Dictionary<String, String> {
                         let separator = ",";
-                        let array = subvalue.componentsSeparatedByString(separator);
-                        for item : String in array {
+                        let itemArr = subvalue.componentsSeparatedByString(separator);
+                        for item : String in itemArr {
                             body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
                             body.appendData("Content-Disposition: form-data; name=\"\(subkey)\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-                            body.appendData("\(item)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                            body.appendData("\(item.trim())\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
                         }
                     }
                 } else {
@@ -226,7 +226,13 @@ class HODClient : NSObject
         task.resume()
     }
 }
-
+extension String
+{
+    func trim() -> String
+    {
+        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+    }
+}
 struct HODApps {
     let RECOGNIZE_SPEECH = "recognizespeech";
     
@@ -300,4 +306,5 @@ struct HODApps {
     let INDEX_STATUS = "indexstatus";
     //let LIST_INDEXES = "listindexes"; REMOVED
     let LIST_RESOURCES = "listresources";
-    let RESTORE_TEXT_INDEX = "restoretextindex";}
+    let RESTORE_TEXT_INDEX = "restoretextindex";
+}

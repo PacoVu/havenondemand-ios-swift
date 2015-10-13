@@ -1,50 +1,50 @@
-# IODClient Library for iOS - SWIFT. V1.0
+# HODClient Library for iOS - SWIFT. V1.0
 
 ----
 ## Overview
-IODClient for iOS - Swift is a utility class, which helps you easily integrate your iOS app with HP IDOL OnDemand Services.
+HODClient for iOS - Swift is a utility class, which helps you easily integrate your iOS app with HP Haven OnDemand Services.
 
-IODClient class exposes source code so you can modify it as you wish.
+HODClient class exposes source code so you can modify it as you wish.
 
 ----
-## Integrate IODClient into iOS Swift project
-1. Download the IODClient library for iOS.
+## Integrate HODClient into iOS Swift project
+1. Download the HODClient library for iOS.
 2. Create a new or open an existing iOS Swift project
-3. Add the IODClient.swift file to the project. 
+3. Add the HODClient.swift file to the project. 
 >![](/images/importlibrary1.jpg)
-4. Browse to the folder where you saved the library and select the IODClient.swift file.
+4. Browse to the folder where you saved the library and select the HODClient.swift file.
 
 ----
 ## API References
 **Constructor**
 
-    IODClient(apiKey:String, version:String = "v1")
+    HODClient(apiKey:String, version:String = "v1")
 
 *Description:*
 
-* Creates and initializes an IODClient object.
+* Creates and initializes an HODClient object.
 
 *Parameters:*
 
 * apiKey: your developer apikey.
-* version: IDOL OnDemand API version. Currently it only supports version 1. Thus, the default value is "v1".
+* version: Haven OnDemand API version. Currently it only supports version 1. Thus, the default value is "v1".
 
 *Example code:*
 
-    var iodClient:IODClient = IODClient(apiKey: "your-api-key");
+    var hodClient:HODClient = HODClient(apiKey: "your-api-key");
 
 ----
 **Function GetRequest**
 
-    GetRequest(inout params:Dictionary<String, AnyObject>, iodApp:String, requestMode:REQ_MODE = .ASYNC)
+    GetRequest(inout params:Dictionary<String, AnyObject>, hodApp:String, requestMode:REQ_MODE = .ASYNC)
 
 *Description:* 
 
-* Sends a HTTP GET request to call an IDOL OnDemand API.
+* Sends a HTTP GET request to call a Haven OnDemand API.
 
 *Parameters:* 
 
-* params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of that IDOL OnDemand API.
+* params: a Dictionary object containing key/value pair parameters to be sent to a Haven OnDemand API, where the keys are the parameters of that API.
 
 >Note: 
 
@@ -56,7 +56,7 @@ IODClient class exposes source code so you can modify it as you wish.
     arrays["entity_type"] = "people_eng,places_eng"
     params["arrays"] = arrays
     
-* iodApp: a string to identify an IDOL OnDemand API. E.g. "extractentities". Current supported apps are listed in the IODClient.iodApps object.
+* hodApp: a string to identify a Haven OnDemand API. E.g. "extractentities". Current supported apps are listed in the HODApps object.
 * mode [REQ_MODE.SYNC | REQ_MODE.ASYNC]: specifies API call as Asynchronous or Synchronous. The default mode is .ASYNC.
 
 *Return: void.*
@@ -71,26 +71,26 @@ IODClient class exposes source code so you can modify it as you wish.
 ## 
     // Call the Entity Extraction API to find people and places from CNN website
 
-    var iodApp = iodClient.iodApps.ENTITY_EXTRACTION;
+    var hodApp = hodClient.hodApps.ENTITY_EXTRACTION;
     var arrays = Dictionary<String, String>()
     arrays["entity_type"] = "people_eng,places_eng"
     var params = Dictionary<String, AnyObject>() 
     params["url"] = "http://www.cnn.com"
     params["arrays"] = arrays
-    iodClient.GetRequest(&params, iodApp:iodApp, requestMode: IODClient.REQ_MODE.SYNC);
+    hodClient.GetRequest(&params, hodApp:hodApp, requestMode: HODClient.REQ_MODE.SYNC);
 
 ----
 **Function PostRequest**
  
-    PostRequest(inout params:Dictionary<String, Object>, iodApp:String, requestMode:REQ_MODE = .ASYNC)
+    PostRequest(inout params:Dictionary<String, Object>, hodApp:String, requestMode:REQ_MODE = .ASYNC)
 
 *Description:* 
 
-* Sends a HTTP POST request to call an IDOL OnDemand API.
+* Sends a HTTP POST request to call a Haven OnDemand API.
 
 *Parameters:*
 
-* params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of that IDOL OnDemand API. 
+* params: a Dictionary object containing key/value pair parameters to be sent to a Haven OnDemand API, where the keys are the parameters of that API. 
 
 >Note: 
 
@@ -102,7 +102,7 @@ IODClient class exposes source code so you can modify it as you wish.
     arrays["entity_type"] = "people_eng,places_eng"
     params["arrays"] = arrays
 
-* iodApp: a string to identify an IDOL OnDemand API. E.g. "ocrdocument". Current supported apps are listed in the IODApps class.
+* hodApp: a string to identify a Haven OnDemand API. E.g. "ocrdocument". Current supported apps are listed in the HODApps object.
 * mode [REQ_MODE.SYNC | REQ_MODE.ASYNC]: specifies API call as Asynchronous or Synchronous. The default mode is .ASYNC.
 
 *Return: void.*
@@ -117,11 +117,11 @@ IODClient class exposes source code so you can modify it as you wish.
 ## 
     // Call the OCR Document API to scan text from an image file
 
-    var iodApp = iodClient.iodApps.OCR_DOCUMENT;
+    var hodApp = hodClient.hodApps.OCR_DOCUMENT;
     var params =  Dictionary<String,Object>()
     params["file"] = "full/path/filename.jpg"
     params["mode"] = "document_photo"
-    iodClient.PostRequest(&params, iodApp:iodApp, requestMode: IODClient.REQ_MODE.ASYNC);
+    hodClient.PostRequest(&params, hodApp:hodApp, requestMode: HODClient.REQ_MODE.ASYNC);
 
 ----
 **Function GetJobResult**
@@ -130,11 +130,11 @@ IODClient class exposes source code so you can modify it as you wish.
 
 *Description:*
 
-* Sends a request to IDOL OnDemand to retrieve content identified by the jobID.
+* Sends a request to Haven OnDemand to retrieve content identified by the jobID.
 
 *Parameter:*
 
-* jobID: the job ID returned from an IDOL OnDemand API upon an asynchronous call.
+* jobID: the job ID returned from a Haven OnDemand API upon an asynchronous call.
 
 *Response:* 
 
@@ -142,7 +142,7 @@ IODClient class exposes source code so you can modify it as you wish.
 
 *Example code:*
 ## 
-    // Parse a JSON string contained a jobID and call the function to get the actual content from IDOL OnDemand server
+    // Parse a JSON string contained a jobID and call the function to get the actual content from Haven OnDemand server
 
     func requestCompletedWithJobID(response:String)
     {
@@ -155,17 +155,17 @@ IODClient class exposes source code so you can modify it as you wish.
             println("json error: \(unwrappedError)")
         } else {
             var jobId = json.valueForKey("jobID") as! String;
-            iodClient.GetJobResult(jobId);
+            hodClient.GetJobResult(jobId);
         }  
     }
 
 ----
 ## API callback functions
-In your class, you will need to inherit the IODClientDelegate protocol and implement delegated functions to receive responses from the server
+In your class, you will need to inherit the HODClientDelegate protocol and implement delegated functions to receive responses from the server
 
-    class MyAppClass : IODClientDelegate { 
+    class MyAppClass : HODClientDelegate { 
         
-        iodClient.delegate = self
+        hodClient.delegate = self
     
         func requestCompletedWithJobID(response:String){ }
     
@@ -182,7 +182,7 @@ When you call the GetRequest() or PostRequest() with the ASYNC mode, the respons
     
     }
 # 
-When you call the GetRequest() or PostRequest() with the SYNC mode, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
+When you call the GetRequest() or PostRequest() with the SYNC mode or call the GetJobResult() function, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
 
     func requestCompletedWithContent(response:String)
     { 
@@ -201,19 +201,19 @@ If there is an error occurred, the error message will be returned to this callba
 
 **Use the Entity Extraction API to extract people and places from cnn.com website with a synchronous GET request**
 
-    class MyAppClass : IODClientDelegate { 
-        var iodClient:IODClient = IODClient(apiKey: "your-api-key")
-        iodClient.delegate = self
+    class MyAppClass : HODClientDelegate { 
+        var hodClient:HODClient = HODClient(apiKey: "your-api-key")
+        hodClient.delegate = self
 
-        func useIODClient() {
-            var iodApp = iodClient.iodApps.ENTITY_EXTRACTION
+        func useHODClient() {
+            var hodApp = hodClient.hodApps.ENTITY_EXTRACTION
             var params =  Dictionary<String,Object>()
             params["url"] = "http://www.cnn.com"
             var arrays = Dictionary<String, String>()
             arrays["entity_type"] = "people_eng,places_eng"
             params["arrays"] = arrays
 
-            iodClient.GetRequest(&params, iodApp:iodApp, requestMode:IODClient.REQ_MODE.SYNC);
+            hodClient.GetRequest(&params, hodApp:hodApp, requestMode:HODClient.REQ_MODE.SYNC);
         }
 
         // implement delegated functions
@@ -253,17 +253,17 @@ If there is an error occurred, the error message will be returned to this callba
  
 **Use the OCR Document API to scan text from an image with an asynchronous POST request**
 
-    class MyAppClass : IODClientDelegate { 
-        var iodClient:IODClient = IODClient(apiKey: "your-api-key");
-        iodClient.delegate = self
+    class MyAppClass : HODClientDelegate { 
+        var hodClient:HODClient = HODClient(apiKey: "your-api-key");
+        hodClient.delegate = self
 
-        func useIODClient() {
-            var iodApp = iodClient.iodApps.OCR_DOCUMENT
+        func useHODClient() {
+            var hodApp = hodClient.hodApps.OCR_DOCUMENT
             var params =  Dictionary<String,Object>()
             params["file"] = "full/path/filename.jpg"
             params["mode"] = "document_photo"
 
-            iodClient.PostRequest(&params, iodApp:iodApp, requestMode:IODClient.REQ_MODE.ASYNC);
+            hodClient.PostRequest(&params, hodApp:hodApp, requestMode:HODClient.REQ_MODE.ASYNC);
         }
 
         // implement delegated functions

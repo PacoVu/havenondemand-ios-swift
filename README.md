@@ -1,8 +1,10 @@
-# HODClient Library for iOS - SWIFT. V1.0
+# HODClient Library for iOS - SWIFT. V2.0
 
 ----
 ## Overview
 HODClient for iOS - Swift is a utility class, which helps you easily integrate your iOS app with HP Haven OnDemand Services.
+
+HODClient V2.0 supports bulk input (source inputs can be an array) where an HOD API is capable of doing so.
 
 HODClient class exposes source code so you can modify it as you wish.
 
@@ -47,14 +49,16 @@ HODClient class exposes source code so you can modify it as you wish.
 * params: a Dictionary object containing key/value pair parameters to be sent to a Haven OnDemand API, where the keys are the parameters of that API.
 
 >Note: 
-
->In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary\<String,String\> object with the key is the parameter name and the values separated by commas ",". 
+>In the case of a parameter type is an array<>, the value must be defined as an array []. 
 
 >E.g.:
 ## 
-    var arrays = Dictionary<String, String>()
-    arrays["entity_type"] = "people_eng,places_eng"
-    params["arrays"] = arrays
+    var params = Dictionary<String,AnyObject>()
+    var urls = [String]()
+    urls.append("http://www.cnn.com")
+    urls.append("http://www.bbc.com")
+    params["entity_type"] = ["people_eng","places_eng"]
+    params["url"] = urls
     
 * hodApp: a string to identify a Haven OnDemand API. E.g. "extractentities". Current supported apps are listed in the HODApps object.
 * mode [REQ_MODE.SYNC | REQ_MODE.ASYNC]: specifies API call as Asynchronous or Synchronous. The default mode is .ASYNC.
@@ -72,11 +76,10 @@ HODClient class exposes source code so you can modify it as you wish.
     // Call the Entity Extraction API to find people and places from CNN website
 
     var hodApp = hodClient.hodApps.ENTITY_EXTRACTION;
-    var arrays = Dictionary<String, String>()
-    arrays["entity_type"] = "people_eng,places_eng"
+    var entities = ["people_eng","places_eng"]
     var params = Dictionary<String, AnyObject>() 
     params["url"] = "http://www.cnn.com"
-    params["arrays"] = arrays
+    params["entity_type"] = entities
     hodClient.GetRequest(&params, hodApp:hodApp, requestMode: HODClient.REQ_MODE.SYNC);
 
 ----
@@ -93,14 +96,16 @@ HODClient class exposes source code so you can modify it as you wish.
 * params: a Dictionary object containing key/value pair parameters to be sent to a Haven OnDemand API, where the keys are the parameters of that API. 
 
 >Note: 
-
->In the case of a parameter type is an array<>, the key must be defined as “arrays” and the value must be a Map\<String,String\> object with the key is the parameter name and the values separated by commas ",".
+>In the case of a parameter type is an array<>, the value must be defined as an array []. 
 
 >E.g.:
 ## 
-    var arrays = Dictionary<String, String>()
-    arrays["entity_type"] = "people_eng,places_eng"
-    params["arrays"] = arrays
+    var params = Dictionary<String,AnyObject>()
+    var urls = [String]()
+    urls.append("http://www.cnn.com")
+    urls.append("http://www.bbc.com")
+    params["entity_type"] = ["people_eng","places_eng"]
+    params["url"] = urls
 
 * hodApp: a string to identify a Haven OnDemand API. E.g. "ocrdocument". Current supported apps are listed in the HODApps object.
 * mode [REQ_MODE.SYNC | REQ_MODE.ASYNC]: specifies API call as Asynchronous or Synchronous. The default mode is .ASYNC.
@@ -208,10 +213,10 @@ If there is an error occurred, the error message will be returned to this callba
         func useHODClient() {
             var hodApp = hodClient.hodApps.ENTITY_EXTRACTION
             var params =  Dictionary<String,Object>()
+            
             params["url"] = "http://www.cnn.com"
-            var arrays = Dictionary<String, String>()
-            arrays["entity_type"] = "people_eng,places_eng"
-            params["arrays"] = arrays
+            params["entity_type"] = ["people_eng","places_eng"]
+            params["unique_entities"] = "true"
 
             hodClient.GetRequest(&params, hodApp:hodApp, requestMode:HODClient.REQ_MODE.SYNC);
         }

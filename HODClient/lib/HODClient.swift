@@ -40,9 +40,7 @@ class HODClient : NSObject
     internal func GetJobResult(jobID:String)
     {
         if !isBusy {
-            var queryStr:String = havenJobResult;
-            queryStr += jobID + "?";
-            queryStr += "apikey=" + apikey;
+            let queryStr:String = String(format: "%@%@?apikey=%@", arguments: [havenJobResult,jobID,apikey])
             getJobID = false;
             let uri = NSURL(string: queryStr);
             let request = NSMutableURLRequest(URL: uri!)
@@ -54,43 +52,34 @@ class HODClient : NSObject
     internal func GetRequest(inout params:Dictionary<String, AnyObject>, hodApp:String, requestMode:REQ_MODE = .ASYNC)
     {
         if !isBusy {
-            var queryStr:String = havenBase;
+            var endPoint:String = havenBase;
             if requestMode == .SYNC {
-                queryStr += "sync/";
+                endPoint += String(format: "sync/%@/%@?apikey=%@", arguments: [hodApp,version,apikey])
                 getJobID = false;
             } else {
-                queryStr += "async/";
+                endPoint += String(format: "async/%@/%@?apikey=%@", arguments: [hodApp,version,apikey])
                 getJobID = true;
             }
-            queryStr += hodApp;
-            queryStr += "/" + version + "?";
-            queryStr += "apikey=" + apikey;
+            var queryStr:String = ""
             if params.count > 0 {
                 for (key, value) in params {
                     if (key == "file") {
                         self.delegate?.onErrorOccurred("Failed. File upload must be used with PostRequest function.")
                         return
-                    } else if (key == "arrays") {
-                        for (subkey, subvalue) in value as! Dictionary<String, String> {
-                            let separator = ",";
-                            let itemArr = subvalue.componentsSeparatedByString(separator);
-                            for item : String in itemArr {
-                                queryStr += "&";
-                                queryStr += subkey;
-                                queryStr += "=";
-                                queryStr += item.trim();
-                            }
+                    }
+                    if let arr = value as? Array<String> {
+                        for item in arr {
+                            queryStr += String(format: "&%@=%@", arguments: [key,item])
                         }
-                    } else {
-                        queryStr += "&";
-                        queryStr += key;
-                        queryStr += "=";
-                        queryStr += value as! String;
+                    } else if let _ = value as? String {
+                        queryStr += String(format: "&%@=%@", arguments: [key,value as! String])
                     }
                 }
             }
-
-            let uri = NSURL(string: queryStr);
+            
+            let encodedUrl = queryStr.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
+            endPoint = endPoint.stringByAppendingString(encodedUrl!)
+            let uri = NSURL(string: endPoint);
             let request = NSMutableURLRequest(URL: uri!)
             request.HTTPMethod = "GET";
             isBusy = true;
@@ -102,14 +91,12 @@ class HODClient : NSObject
         if !isBusy {
             var queryStr:String = havenBase;
             if requestMode == .SYNC {
-                queryStr += "sync/";
+                queryStr += String(format: "sync/%@/%@", arguments: [hodApp,version])
                 getJobID = false;
             } else {
-                queryStr += "async/";
+                queryStr += String(format: "async/%@/%@", arguments: [hodApp,version])
                 getJobID = true;
             }
-            queryStr += hodApp;
-            queryStr += "/" + version;
             let appUrl = NSURL(string: queryStr);
             let request = NSMutableURLRequest();
             request.URL = appUrl!;
@@ -139,44 +126,66 @@ class HODClient : NSObject
         
         if parameters.count > 0 {
             for (key, value) in parameters {
-                if (key == "file") {
-                    let fullFileNameWithPath = value as! String
-                    let fileUrl = NSURL(fileURLWithPath: fullFileNameWithPath)
-                    do {
-                        let data = try NSData(contentsOfURL: fileUrl,options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                        var index = fullFileNameWithPath.rangeOfString("/", options: .BackwardsSearch)?.endIndex
-                        let fileName = fullFileNameWithPath.substringFromIndex(index!)
-                        index = fileName.rangeOfString(".", options: .BackwardsSearch)?.endIndex
-                        let fileExtension = fileName.substringFromIndex(index!)
-                        
-                        let mimeType = DetermineMIMEType(fileExtension)!
-                        
-                        body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-                        body.appendData("Content-Disposition: form-data; name=\"\(key)\"; filename=\"\(fileName)\"\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-                        body.appendData("Content-Type: \(mimeType)\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-                        body.appendData(data)
-                        body.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-                        
-                    } catch let error as NSError {
-                        self.delegate!.onErrorOccurred(error.localizedDescription as String)
-                        return nil
-                    }
-                    
-                    
-                } else if (key == "arrays") {
-                    for (subkey, subvalue) in value as! Dictionary<String, String> {
-                        let separator = ",";
-                        let itemArr = subvalue.componentsSeparatedByString(separator);
-                        for item : String in itemArr {
+                if let arr = value as? Array<String> {
+                    if (key == "file") {
+                        for file in arr {
+                            let fullFileNameWithPath = file
+                            let fileUrl = NSURL(fileURLWithPath: fullFileNameWithPath)
+                            do {
+                                let data = try NSData(contentsOfURL: fileUrl,options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                                var index = fullFileNameWithPath.rangeOfString("/", options: .BackwardsSearch)?.endIndex
+                                let fileName = fullFileNameWithPath.substringFromIndex(index!)
+                                index = fileName.rangeOfString(".", options: .BackwardsSearch)?.endIndex
+                                let fileExtension = fileName.substringFromIndex(index!)
+                            
+                                let mimeType = DetermineMIMEType(fileExtension)!
+                            
+                                body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                                body.appendData("Content-Disposition: form-data; name=\"\(key)\"; filename=\"\(fileName)\"\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                                body.appendData("Content-Type: \(mimeType)\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                                body.appendData(data)
+                                body.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                            
+                            } catch let error as NSError {
+                                self.delegate!.onErrorOccurred(error.localizedDescription as String)
+                                return nil
+                            }
+                        }
+                    } else {
+                        for item in arr {
                             body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-                            body.appendData("Content-Disposition: form-data; name=\"\(subkey)\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-                            body.appendData("\(item.trim())\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                            body.appendData("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                            body.appendData("\(item )\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
                         }
                     }
-                } else {
-                    body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-                    body.appendData("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-                    body.appendData("\(value as! String)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                } else if let _ = value as? String {
+                    if (key == "file") {
+                        let fullFileNameWithPath = value as! String
+                        let fileUrl = NSURL(fileURLWithPath: fullFileNameWithPath)
+                        do {
+                            let data = try NSData(contentsOfURL: fileUrl,options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                            var index = fullFileNameWithPath.rangeOfString("/", options: .BackwardsSearch)?.endIndex
+                            let fileName = fullFileNameWithPath.substringFromIndex(index!)
+                            index = fileName.rangeOfString(".", options: .BackwardsSearch)?.endIndex
+                            let fileExtension = fileName.substringFromIndex(index!)
+                            
+                            let mimeType = DetermineMIMEType(fileExtension)!
+                            
+                            body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                            body.appendData("Content-Disposition: form-data; name=\"\(key)\"; filename=\"\(fileName)\"\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                            body.appendData("Content-Type: \(mimeType)\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                            body.appendData(data)
+                            body.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                            
+                        } catch let error as NSError {
+                            self.delegate!.onErrorOccurred(error.localizedDescription as String)
+                            return nil
+                        }
+                    } else {
+                        body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                        body.appendData("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                        body.appendData("\(value as! String)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                    }
                 }
             }
         }
@@ -289,6 +298,7 @@ struct HODApps {
     let QUERY_TEXT_INDEX = "querytextindex";
     let RETRIEVE_INDEX_FIELDS = "retrieveindexfields";
     
+    let AUTO_COMPLETE = "autocomplete";
     let CLASSIFY_DOCUMENT = "classifydocument";
     let EXTRACT_CONCEPTS = "extractconcepts";
     let CATEGORIZE_DOCUMENT = "categorizedocument";

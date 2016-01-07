@@ -290,7 +290,7 @@ If there is an error occurred, the error message will be returned to this callba
 
 * Parses a json string and returns an object type based on the hodApp name.
 
->Note: Only APIs which return standard responses can be parsed by using this function. A list of supported APIs can be found from the StandardResponse class.
+>Note: Only APIs which return standard responses can be parsed by using this function. A list of supported APIs can be found from the StandardResponse class. All supported standard response classes are listed at the end of this document.
 
 *Parameters:* 
 
@@ -699,5 +699,56 @@ If there is an error occurred, the error message will be returned to this callba
     }
 
 ----
+
+## Standard response classes
+```
+SpeechRecognitionResponse
+CancelConnectorScheduleResponse
+ConnectorHistoryResponse
+ConnectorStatusResponse
+CreateConnectorResponse
+DeleteConnectorResponse
+RetrieveConnectorConfigurationFileResponse
+RetrieveConnectorConfigurationAttrResponse
+StartConnectorResponse
+StopConnectorResponse
+UpdateConnectorResponse
+ExpandContainerResponse
+StoreObjectResponse
+ViewDocumentResponse
+GetCommonNeighborsResponse
+GetNeighborsResponse
+GetNodesResponse
+GetShortestPathResponse
+GetSubgraphResponse
+SuggestLinksResponse
+SummarizeGraphResponse
+OCRDocumentResponse
+RecognizeBarcodesResponse
+RecognizeImagesResponse
+DetectFacesResponse
+PredictResponse
+RecommendResponse
+Allrecommendations
+TrainPredictorResponse
+CreateQueryProfileResponse
+DeleteQueryProfileResponse
+RetrieveQueryProfileResponse
+UpdateQueryProfileResponse
+FindRelatedConceptsResponse
+AutoCompleteResponse
+ExtractConceptsResponse
+ExpandTermsResponse
+HighlightTextResponse
+IdentifyLanguageResponse
+TokenizeTextResponse
+SentimentAnalysisResponse
+AddToTextIndexResponseCreateTextIndexResponse
+DeleteTextIndexResponseDeleteFromTextIndexResponse
+IndexStatusResponse
+ListResourcesResponse
+RestoreTextIndexResponse
+```
+
 ## License
 Licensed under the MIT License.

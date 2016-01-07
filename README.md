@@ -729,7 +729,6 @@ RecognizeImagesResponse
 DetectFacesResponse
 PredictResponse
 RecommendResponse
-Allrecommendations
 TrainPredictorResponse
 CreateQueryProfileResponse
 DeleteQueryProfileResponse
@@ -743,8 +742,10 @@ HighlightTextResponse
 IdentifyLanguageResponse
 TokenizeTextResponse
 SentimentAnalysisResponse
-AddToTextIndexResponseCreateTextIndexResponse
-DeleteTextIndexResponseDeleteFromTextIndexResponse
+AddToTextIndexResponse
+CreateTextIndexResponse
+DeleteTextIndexResponse
+DeleteFromTextIndexResponse
 IndexStatusResponse
 ListResourcesResponse
 RestoreTextIndexResponse

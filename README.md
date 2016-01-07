@@ -106,7 +106,7 @@ HODClient class exposes source code so you can modify it as you wish.
     var params = Dictionary<String,AnyObject>()
     var urls = [String]()
     urls.append("http://www.cnn.com")
-    urls.append("http://www.bbc.com")
+    urls.append("http://www.bbc.com")    
     params["entity_type"] = ["people_eng","places_eng"]
     params["url"] = urls
 
@@ -334,10 +334,11 @@ If there is an error occurred, the error message will be returned to this callba
             var errorStr = ""
             for error in errors {
                 let err = error as! HODErrorObject
-                errorStr = "Error code: " + String(format: "%d", err.error) + "\n"
-                errorStr += "Error reason: " + err.reason + "\n"
-                errorStr += "Error detail: " + err.detail + "\n"
-                errorStr += "Error jobID: " + err.jobID + "\n"
+                errorMsg =  String(format: "Error code: %d\n", err.error)
+                errorMsg += String(format: "Error reason: %@\n", err.reason)
+                errorMsg += String(format: "Error detail: %@\n", err.detail)
+                errorMsg += String(format: "JobID: %@\n", err.jobID)
+                print(errorMsg)
                 if err.error == HODErrorCode.QUEUED { // queues
                     // sleep for a few seconds then check the job status again
                     hodClient.GetJobStatus(err.jobID)
@@ -520,10 +521,10 @@ If there is an error occurred, the error message will be returned to this callba
             var errorMsg = ""
             for error in errors {
                 let err = error as! HODErrorObject
-                errorMsg = "Error code: " + String(format: "%d", err.error) + "\n"
-                errorMsg += "Error reason: " + err.reason + "\n"
-                errorMsg += "Error detail: " + err.detail + "\n"
-                errorMsg += "Error jobID: " + err.jobID + "\n"
+                errorMsg =  String(format: "Error code: %d\n", err.error)
+                errorMsg += String(format: "Error reason: %@\n", err.reason)
+                errorMsg += String(format: "Error detail: %@\n", err.detail)
+                errorMsg += String(format: "JobID: %@\n", err.jobID)
                 print(errorMsg)
                 if err.error == HODErrorCode.QUEUED { // queues
                     // sleep for a few seconds then check the job status again
@@ -538,6 +539,46 @@ If there is an error occurred, the error message will be returned to this callba
         }
     }
     
+----
+**Function GetLastError**
+
+    GetLastError() -> NSMutableArray
+
+*Description:* 
+
+* Get the latest error(s) if any happened during parsing the json string or HOD error returned from HOD server.
+> Note: The job "queued" or "in progress" status is also considered as an error situation. See the example below for how to detect and handle error status. 
+
+*Parameters:* 
+
+* None.
+
+*Returned value:*
+
+* A NSMutableArray contains HODErrorObject.
+
+*Example code:*
+## 
+    let errors = hodParser.GetLastError()
+    var errorMsg = ""
+    for error in errors {
+        let err = error as! HODErrorObject
+        errorMsg =  String(format: "Error code: %d\n", err.error)
+        errorMsg += String(format: "Error reason: %@\n", err.reason)
+        errorMsg += String(format: "Error detail: %@\n", err.detail)
+        errorMsg += String(format: "JobID: %@\n", err.jobID)
+        print(errorMsg)
+        if err.error == HODErrorCode.QUEUED { // queues
+            // sleep for a few seconds then check the job status again
+            hodClient.GetJobStatus(err.jobID)
+            break
+        } else if err.error == HODErrorCode.IN_PROGRESS { // in progress
+            // sleep for for a while then check the job status again
+            hodClient.GetJobStatus(err.jobID)
+            break
+        }
+    }
+
 ----
 ## Demo code 1: 
 
@@ -595,9 +636,9 @@ If there is an error occurred, the error message will be returned to this callba
  
 **Use the OCR Document API to scan text from an image with an asynchronous POST request**
 
-    class MyAppClass : HODClientDelegate { 
-        var hodClient:HODClient = HODClient(apiKey: "your-api-key")
-        var hodParser:HODResponseParser = HODResponseParser()
+    class MyAppClass : HODClientDelegate {     
+        var hodClient:HODClient = HODClient(apiKey: "your-api-key")        
+        var hodParser:HODResponseParser = HODResponseParser()        
         hodClient.delegate = self
 
         func useHODClient() {
@@ -610,7 +651,6 @@ If there is an error occurred, the error message will be returned to this callba
         }
 
         // implement delegated functions
-
         /**************************************************************************************
         * An async request will result in a response with a jobID. We parse the response to get
         * the jobID and send a request for the actual content identified by the jobID.
@@ -621,7 +661,6 @@ If there is an error occurred, the error message will be returned to this callba
                 hodClient.GetJobStatus(jobID)
             }
         }
-
         func requestCompletedWithContent(response:String){
             if let resp = (hodParser.ParseStandardResponse(app!, jsonStr: response) as? OCRDocumentResponse) {
                 var result = "Scanned text:\n"
@@ -637,10 +676,10 @@ If there is an error occurred, the error message will be returned to this callba
                 var errorMsg = ""
                 for error in errors {
                     let err = error as! HODErrorObject
-                    errorMsg = "Error code: " + String(format: "%d", err.error) + "\n"
-                    errorMsg += "Error reason: " + err.reason + "\n"
-                    errorMsg += "Error detail: " + err.detail + "\n"
-                    errorMsg += "Error jobID: " + err.jobID + "\n"
+                    errorMsg =  String(format: "Error code: %d\n", err.error)
+                    errorMsg += String(format: "Error reason: %@\n", err.reason)
+                    errorMsg += String(format: "Error detail: %@\n", err.detail)
+                    errorMsg += String(format: "JobID: %@\n", err.jobID)
                     print(errorMsg)
                     if err.error == HODErrorCode.QUEUED { // queues
                         // sleep for a few seconds then check the job status again

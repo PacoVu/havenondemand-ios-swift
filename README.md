@@ -268,7 +268,7 @@ If there is an error occurred, the error message will be returned to this callba
 
 * jsonStr: a json string returned from an asynchronous API call.
 
-*Returned value*
+*Returned value:*
 
 * The jobID or an empty string if not found.
 
@@ -297,7 +297,7 @@ If there is an error occurred, the error message will be returned to this callba
 * hodApp: a string identify an HOD API. Supported APIs' standard responses are defined in the StandardResponse class. E.g. StandardResponse.RECOGNIZE_SPEECH.
 * jsonStr: a json string returned from a synchronous API call or from the GetJobResult() or GetJobStatus() function.
 
-*Returned value*
+*Returned value:*
 
 * An object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the returned object is nil and the error or job status can be accessed by calling the GetLastError() function.
 
@@ -475,6 +475,8 @@ If there is an error occurred, the error message will be returned to this callba
                         keyValue = (value as? String)!
                     } else if let _ = value as? Int {
                         keyValue = (value as? Int)!
+                    } else if let _ = value as? Double {
+                        keyValue = (value as? Double)!
                     } else if let _ = value as? NSDictionary {
                         let keyValue:NSDictionary = (value as? NSDictionary)!
                         isDictionary = true
@@ -594,7 +596,8 @@ If there is an error occurred, the error message will be returned to this callba
 **Use the OCR Document API to scan text from an image with an asynchronous POST request**
 
     class MyAppClass : HODClientDelegate { 
-        var hodClient:HODClient = HODClient(apiKey: "your-api-key");
+        var hodClient:HODClient = HODClient(apiKey: "your-api-key")
+        var hodParser:HODResponseParser = HODResponseParser()
         hodClient.delegate = self
 
         func useHODClient() {

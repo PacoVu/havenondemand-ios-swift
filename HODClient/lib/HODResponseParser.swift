@@ -10,11 +10,11 @@ import Foundation
 
 public struct HODErrorCode {
     static let IN_PROGRESS = 1610
-    static let QUEUED = 1620;
-    static let NONSTANDARD_RESPONSE = 1630;
-    static let INVALID_PARAM = 1640;
-    static let INVALID_HOD_RESPONSE = 1650;
-    static let UNKNOWN_ERROR = 1660;
+    static let QUEUED = 1620
+    static let NONSTANDARD_RESPONSE = 1630
+    static let INVALID_PARAM = 1640
+    static let INVALID_HOD_RESPONSE = 1650
+    static let UNKNOWN_ERROR = 1660
 }
 
 class HODResponseParser
@@ -40,7 +40,7 @@ class HODResponseParser
         
         if (jsonStr.characters.count != 0) {
             let resStr = jsonStr.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+            let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding)
             do {
                 let json = try NSJSONSerialization.JSONObjectWithData(data!, options: [])
                 guard let _ :NSDictionary = json as? NSDictionary else {
@@ -49,7 +49,7 @@ class HODResponseParser
                 jobID = json.valueForKey("jobID") as? String
             }
             catch {
-                return jobID;
+                return jobID
             }
         }
         return jobID
@@ -60,19 +60,19 @@ class HODResponseParser
         var result = jsonStr
         if (jsonStr.characters.count == 0) {
             let err = String(format: "%@%d%@", arguments: ["{\"error\":", HODErrorCode.INVALID_HOD_RESPONSE, ",\"reason\":\"Empty response.\"}"])
-            let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+            let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
             let jsonObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
             let hodError = HODErrorObject(json: jsonObj)
             addError(hodError)
             return nil
         }
         let resStr = jsonStr.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+        let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding)
         do {
             let jsonObj = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)
             guard let _ :NSDictionary = jsonObj as? NSDictionary else {
                 let err = String(format: "%@%d%@", arguments: ["{\"error\":", HODErrorCode.INVALID_HOD_RESPONSE, ",\"reason\":\"Invalid json response.\"}"])
-                let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+                let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                 let jsonObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
                 let hodError = HODErrorObject(json: jsonObj)
                 addError(hodError)
@@ -80,7 +80,7 @@ class HODResponseParser
             }
             
             if let actions = jsonObj["actions"] as? NSArray {
-                let status = actions[0].valueForKey("status") as? String;
+                let status = actions[0].valueForKey("status") as? String
                 if status == "finished" || status == "FINISHED" {
                     let jsonData: NSData?
                     do {
@@ -90,7 +90,7 @@ class HODResponseParser
                     } catch let error as NSError {
                         
                         let err = String(format: "%@%d%@%@%@", arguments: ["{\"error\":", HODErrorCode.INVALID_HOD_RESPONSE, ",\"reason\":\"", error.localizedDescription, "\"}"])
-                        let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+                        let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                         let errorObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
                         let hodError = HODErrorObject(json: errorObj)
                         addError(hodError)
@@ -107,7 +107,7 @@ class HODResponseParser
                     var jobID = jsonObj.valueForKey("jobID") as? String
                     jobID = jobID!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                     let err = String(format: "%@%d%@%@%@", "{\"error\":", HODErrorCode.QUEUED,",\"reason\":\"Task is in queue\",\"jobID\":\"", jobID!, "\"}")
-                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                     let errorObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
                     let hodError = HODErrorObject(json: errorObj)
                     addError(hodError)
@@ -116,14 +116,14 @@ class HODResponseParser
                     var jobID = jsonObj.valueForKey("jobID") as? String
                     jobID = jobID!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                     let err = String(format: "%@%d%@%@%@", "{\"error\":",HODErrorCode.IN_PROGRESS,",\"reason\":\"Task is in progress\",\"jobID\":\"", jobID!, "\"}")
-                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                     let errorObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
                     let hodError = HODErrorObject(json: errorObj)
                     addError(hodError)
                     return nil
                 } else {
                     let err = String(format: "%@%d%@%@", "{\"error\":",HODErrorCode.UNKNOWN_ERROR,",\"reason\":\"", status!, "\"}")
-                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                     let errorObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
                     let hodError = HODErrorObject(json: errorObj)
                     addError(hodError)
@@ -146,7 +146,7 @@ class HODResponseParser
         }
         catch {
             let err = String(format: "%@%d%@", arguments: ["{\"error\":", HODErrorCode.INVALID_HOD_RESPONSE, ",\"reason\":\"Invalid json response\"}"])
-            let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+            let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
             let errorObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
             let hodError = HODErrorObject(json: errorObj)
             addError(hodError)
@@ -825,29 +825,29 @@ class HODResponseParser
         var obj : NSDictionary!
         if (jsonStr.characters.count == 0) {
             let err = String(format: "%@%d%@", arguments: ["{\"error\":", HODErrorCode.INVALID_HOD_RESPONSE, ",\"reason\":\"Empty response.\"}"])
-            let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+            let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
             let jsonObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
             let hodError = HODErrorObject(json: jsonObj)
             addError(hodError)
             return nil
         }
         let resStr = jsonStr.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+        let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding)
         do {
             let jsonObj = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)
             guard let _ :NSDictionary = jsonObj as? NSDictionary else {
                 let err = String(format: "%@%d%@", arguments: ["{\"error\":", HODErrorCode.INVALID_HOD_RESPONSE, ",\"reason\":\"Invalid json response.\"}"])
-                let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+                let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                 let jsonObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
                 let hodError = HODErrorObject(json: jsonObj)
                 addError(hodError)
                 return nil
             }
             
-            var result = jsonStr;
+            var result = jsonStr
             
             if let actions = jsonObj["actions"] as? NSArray {
-                let status = actions[0].valueForKey("status") as? String;
+                let status = actions[0].valueForKey("status") as? String
                 if status == "finished" || status == "FINISHED" {
                     let jsonData: NSData?
                     do {
@@ -857,7 +857,7 @@ class HODResponseParser
                     } catch let error as NSError {
                         
                         let err = String(format: "%@%d%@%@%@", arguments: ["{\"error\":", HODErrorCode.INVALID_HOD_RESPONSE, ",\"reason\":\"", error.localizedDescription, "\"}"])
-                        let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+                        let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                         let errorObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
                         let hodError = HODErrorObject(json: errorObj)
                         addError(hodError)
@@ -874,7 +874,7 @@ class HODResponseParser
                     var jobID = jsonObj.valueForKey("jobID") as? String
                     jobID = jobID!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                     let err = String(format: "%@%d%@%@%@", "{\"error\":", HODErrorCode.QUEUED,",\"reason\":\"Task is in queue\",\"jobID\":\"", jobID!, "\"}")
-                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                     let errorObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
                     let hodError = HODErrorObject(json: errorObj)
                     addError(hodError)
@@ -883,14 +883,14 @@ class HODResponseParser
                     var jobID = jsonObj.valueForKey("jobID") as? String
                     jobID = jobID!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                     let err = String(format: "%@%d%@%@%@", "{\"error\":",HODErrorCode.IN_PROGRESS,",\"reason\":\"Task is in progress\",\"jobID\":\"", jobID!, "\"}")
-                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                     let errorObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
                     let hodError = HODErrorObject(json: errorObj)
                     addError(hodError)
                     return nil
                 } else {
                     let err = String(format: "%@%d%@%@", "{\"error\":",HODErrorCode.UNKNOWN_ERROR,",\"reason\":\"", status!, "\"}")
-                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+                    let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                     let errorObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
                     let hodError = HODErrorObject(json: errorObj)
                     addError(hodError)
@@ -915,7 +915,7 @@ class HODResponseParser
                 obj = try NSJSONSerialization.JSONObjectWithData(data1!, options: []) as! NSDictionary
             } catch let error as NSError {
                 let err = String(format: "%@%d%@%@", "{\"error\":",HODErrorCode.INVALID_HOD_RESPONSE,",\"reason\":\"", error.localizedDescription, "\"}")
-                let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+                let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
                 let errorObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
                 let hodError = HODErrorObject(json: errorObj)
                 addError(hodError)
@@ -924,11 +924,11 @@ class HODResponseParser
         }
         catch {
             let err = String(format: "%@%d%@", arguments: ["{\"error\":", HODErrorCode.INVALID_HOD_RESPONSE, ",\"reason\":\"Invalid json response\"}"])
-            let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding);
+            let errData = (err as NSString).dataUsingEncoding(NSUTF8StringEncoding)
             let errorObj = (try! NSJSONSerialization.JSONObjectWithData(errData!, options: [])) as! NSDictionary
             let hodError = HODErrorObject(json: errorObj)
             addError(hodError)
-            return nil;
+            return nil
         }
         return obj
     }

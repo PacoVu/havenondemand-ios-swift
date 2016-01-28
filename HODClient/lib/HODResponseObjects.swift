@@ -56,7 +56,7 @@ public class SpeechRecognitionResponse : NSObject{
     public class Document:NSObject {
         var offset:Int64 = 0
         var content:String = ""
-        var confidence:Double = 0.0
+        var confidence:Int = 0
         var duration:Int = 0
         init(json:NSDictionary) {
             super.init()
@@ -386,10 +386,10 @@ public class DeleteConnectorResponse:NSObject {
 public class RetrieveConnectorConfigurationFileResponse:NSObject {
     
     var name: String = ""
-    var flavor: String = "" //( String )  The flavor of the connector.
-    var config: String = "" //( String )  The base64 encoded connector configuration.
-    var licenseKey: String = "" //( String , optional)  The license key for onsite flavor connectors only.
-    var validation: String = "" //(String , optional)  The connector validation key for onsite flavor connectors only.
+    var flavor: String = ""
+    var config: String = ""
+    var licenseKey: String = ""
+    var validation: String = ""
     var verification: String = ""
     init(json:NSDictionary) {
         super.init()
@@ -417,7 +417,7 @@ public class RetrieveConnectorConfigurationFileResponse:NSObject {
 public class RetrieveConnectorConfigurationAttrResponse:NSObject {
     
     var name: String = ""
-    var flavor: String = "" //( String )  The flavor of the connector.
+    var flavor: String = ""
     var config: Config!
     init(json:NSDictionary) {
         super.init()
@@ -447,12 +447,12 @@ public class RetrieveConnectorConfigurationAttrResponse:NSObject {
     }
     public class Config:NSObject
     {
-        var config:ConfigObj!  // (object , optional)  The configured config attributes for this connector.
-        var destination:DestinationObj!  // ( object , optional)  The configured destination attributes for this connector.
-        var schedule:ScheduleObj! // ( object , optional)  The configured schedule attributes for this connector.
-        var credentials:CredentialsObj! // ( object , optional)  The configured credentials attributes for this connector.
-        var credentials_policy:CredentialsPolicy! // ( object , optional)  The configured credentials_policy attributes for this connector.
-        var _description:String = "" // ( String , optional)  The connector description.
+        var config:ConfigObj!
+        var destination:DestinationObj!
+        var schedule:ScheduleObj!
+        var credentials:CredentialsObj!
+        var credentials_policy:CredentialsPolicy!
+        var _description:String = ""
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
@@ -1217,8 +1217,8 @@ public class GetSubgraphResponse:NSObject
     public class Edges:NSObject
     {
         var attributes: Attributes!
-        var source: Int64 = 0 //( integer )  Source node ID.
-        var target: Int64 = 0 //( integer )  Target node ID.
+        var source: Int64 = 0
+        var target: Int64 = 0
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
@@ -1398,8 +1398,8 @@ public class SuggestLinksResponse:NSObject
     public class Nodes:NSObject
     {
         var attributes: Attributes!
-        var id: Int64 = 0 //(integer )  Node ID
-        var sort_value: Double = 0.0 //(number , optional)
+        var id: Int64 = 0
+        var sort_value: Double = 0.0
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
@@ -1436,8 +1436,8 @@ public class SuggestLinksResponse:NSObject
 public class SummarizeGraphResponse:NSObject
 {
     var attributes: NSMutableArray = []
-    var edges: Int64 = 0 //(integer )  The number of edges in the graph.
-    var nodes: Int64 = 0 //(integer )  The number of nodes in the graph.
+    var edges: Int64 = 0
+    var nodes: Int64 = 0
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -1469,10 +1469,10 @@ public class SummarizeGraphResponse:NSObject
     }
     public class Attributes:NSObject
     {
-        var data_type: String = "" //(string )  The type of the attribute.
-        var element_type: String = "" // ( string )  Whether the attribute is for nodes or edges.
-        var name: String = "" // ( string )  The name of the attribute.
-        var number: Int64 = 0 //( integer )  The number of elements that have this attribute set.
+        var data_type: String = ""
+        var element_type: String = ""
+        var name: String = ""
+        var number: Int64 = 0
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
@@ -1650,7 +1650,7 @@ public class RecognizeImagesResponse : NSObject{
         var unique_name:String = ""
         var name:String = ""
         var db:String = ""
-        var corners:NSMutableArray = [] // Corners
+        var corners:NSMutableArray = []
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
@@ -1711,7 +1711,7 @@ public class RecognizeImagesResponse : NSObject{
 //////////////////////////////////////////////////////////////
 /************************************************************/
 public class DetectFacesResponse : NSObject {
-    var face:NSMutableArray = [] // Face
+    var face:NSMutableArray = []
     
     init(json : NSDictionary) {
         super.init()
@@ -1857,8 +1857,8 @@ public class PredictResponse:NSObject {
 /************************************************************/
 public class RecommendResponse:NSObject
 {
-    public var allRecommendations:NSMutableArray = [] // (array[Allrecommendations] , optional) 
-    public var fields:NSMutableArray = [] // (array[Fields] )
+    public var allRecommendations:NSMutableArray = []
+    public var fields:NSMutableArray = []
     init(json : NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -1881,8 +1881,8 @@ public class RecommendResponse:NSObject
     }
     public class Allrecommendations:NSObject
     {
-        var originalValues:NSMutableArray = [] // (array[string] , optional)
-        var recommendations:NSMutableArray = [] // ( array[Recommendations] , optional)
+        var originalValues:NSMutableArray = []
+        var recommendations:NSMutableArray = []
         init(json : NSDictionary) {
             super.init()
             for (key, value) in json {
@@ -1906,10 +1906,10 @@ public class RecommendResponse:NSObject
     }
     public class Recommendations:NSObject
     {
-        var confidence:Double = 0 // (number , optional)  The confidence that the label will be as required
-        var distance:Double = 0 // (number , optional)  Distance between the original record to the recommended record.
-        var new_prediction:String = "" //  ( string , optional)  Predicted field result according to prediction model.
-        var recommendation:NSMutableArray = [] //  ( array[string] , optional)
+        var confidence:Double = 0
+        var distance:Double = 0
+        var new_prediction:String = ""
+        var recommendation:NSMutableArray = []
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
@@ -1942,9 +1942,9 @@ public class RecommendResponse:NSObject
     }
     public class Fields:NSObject
     {
-        var name:String = "" // (string )  The name of the field.
-        var order:Int = 0 //  ( integer )  The order of the field.
-        var type:String = "" //  ( string )  The type of the field.
+        var name:String = ""
+        var order:Int = 0
+        var type:String = ""
         init(json: NSDictionary) {
             super.init()
             for (key, value) in json {
@@ -1972,8 +1972,8 @@ public class RecommendResponse:NSObject
 /************************************************************/
 public class TrainPredictorResponse:NSObject
 {
-    var message:String = "" //( string )  A message that contains the status of the service.
-    var service:String = "" //( string )  The name that identifies the service that has been created.
+    var message:String = ""
+    var service:String = ""
     init(json: NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -1996,8 +1996,8 @@ public class TrainPredictorResponse:NSObject
 /************************************************************/
 public class CreateQueryProfileResponse:NSObject
 {
-    var message:String = "" //(string )  Indicates that the query profile was deleted successfully.
-    var query_profile:String = "" //(string )  The name of the query profile.
+    var message:String = ""
+    var query_profile:String = ""
     init(json: NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -2020,8 +2020,8 @@ public class CreateQueryProfileResponse:NSObject
 /************************************************************/
 public class DeleteQueryProfileResponse:NSObject
 {
-    var message:String = "" //(string )  Indicates that the query profile was deleted successfully.
-    var query_profile:String = "" //(string )  The name of the query profile.
+    var message:String = ""
+    var query_profile:String = ""
     init(json: NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -2044,16 +2044,16 @@ public class DeleteQueryProfileResponse:NSObject
 /************************************************************/
 public class RetrieveQueryProfileResponse:NSObject
 {
-    var query_profile:String = ""  //(string )  The name of the query profile.
-    var _description:String = ""  //(string or null )  Query profile description.
-    var query_manipulation_index:String = ""  //( string )  The name of the query manipulation index.
-    var promotions_enabled:Bool = false  //( boolean )  Whether to enable promotion.
-    var promotion_categories:NSMutableArray = [] //(array[string] )  List of promotion categories.
-    var promotions_identified:Bool = false //(boolean )  Whether to identify whether documents are a promotion or not.
-    var synonyms_enabled:Bool = false //(boolean )  Whether to enable synonyms.
-    var synonym_categories:NSMutableArray = [] //(array[string] )  List of synonym categories.
-    var blacklists_enabled:Bool = false //(boolean )  Whether to enable blacklist.
-    var blacklist_categories:NSMutableArray = [] //(array[string] )  List of blacklist categories.
+    var query_profile:String = ""
+    var _description:String = ""
+    var query_manipulation_index:String = ""
+    var promotions_enabled:Bool = false
+    var promotion_categories:NSMutableArray = []
+    var promotions_identified:Bool = false
+    var synonyms_enabled:Bool = false
+    var synonym_categories:NSMutableArray = []
+    var blacklists_enabled:Bool = false
+    var blacklist_categories:NSMutableArray = []
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -2111,8 +2111,8 @@ public class RetrieveQueryProfileResponse:NSObject
 /************************************************************/
 public class UpdateQueryProfileResponse:NSObject
 {
-    var message:String = "" //(string )  Indicates that the query profile was deleted successfully.
-    var query_profile:String = "" //(string )  The name of the query profile.
+    var message:String = ""
+    var query_profile:String = ""
     init(json: NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -2135,7 +2135,7 @@ public class UpdateQueryProfileResponse:NSObject
 /************************************************************/
 public class FindRelatedConceptsResponse:NSObject
 {
-    var entities:NSMutableArray = [] //(array[Entities] )  A result term or phrase identified in the results set.
+    var entities:NSMutableArray = []
     init(json : NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -2185,7 +2185,7 @@ public class FindRelatedConceptsResponse:NSObject
 /************************************************************/
 public class AutoCompleteResponse:NSObject
 {
-    var words:NSMutableArray = [] // ( array[string] , optional)  Strings that complete the supplied text.
+    var words:NSMutableArray = []
     init(json : NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -2210,7 +2210,7 @@ public class AutoCompleteResponse:NSObject
 /************************************************************/
 public class ExtractConceptsResponse:NSObject
 {
-    var concepts:NSMutableArray = [] // (array[Concepts] )  A result concept identified in the results set.
+    var concepts:NSMutableArray = []
     init(json : NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -2228,8 +2228,8 @@ public class ExtractConceptsResponse:NSObject
     }
     public class Concepts:NSObject
     {
-        var concept:String = "" //(string)  The text of the identified concept.
-        var occurrences:Double = 0 // (number)  The total number of occurrences of this element in the results set.
+        var concept:String = ""
+        var occurrences:Double = 0
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
@@ -2696,8 +2696,8 @@ public class IndexStatusResponse:NSObject
 /************************************************************/
 public class ListResourcesResponse:NSObject
 {
-    var private_resources:NSMutableArray = [] //(array[Private_resources] )  List of private resources.
-    var public_resources:NSMutableArray = [] // ( array[Public_resources] )  List of public resources.
+    var private_resources:NSMutableArray = []
+    var public_resources:NSMutableArray = []
     init(json : NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -2748,9 +2748,9 @@ public class ListResourcesResponse:NSObject
     }
     public class Public_resources:NSObject
     {
-        var _description:String = "" // (string , optional)  The description of the resource.
-        var resource:String = "" // ( string )  The resource name.
-        var type:String = "" // ( string )  The type of resource.
+        var _description:String = ""
+        var resource:String = ""
+        var type:String = ""
         init(json: NSDictionary) {
             super.init()
             for (key, value) in json {
@@ -2779,7 +2779,7 @@ public class ListResourcesResponse:NSObject
 /************************************************************/
 public class RestoreTextIndexResponse:NSObject
 {
-    var restored:String = "" //(string , optional)  The name of the index created.
+    var restored:String = ""
     init(json: NSDictionary) {
         super.init()
         for (key, value) in json {

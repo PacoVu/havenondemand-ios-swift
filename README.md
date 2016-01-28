@@ -36,7 +36,7 @@ HODClient class exposes source code so you can modify it as you wish.
 
 *Example code:*
 
-    var hodClient:HODClient = HODClient(apiKey: "your-api-key");
+    var hodClient:HODClient = HODClient(apiKey: "your-api-key")
 
 ----
 **Function GetRequest**
@@ -125,7 +125,7 @@ HODClient class exposes source code so you can modify it as you wish.
 ## 
     // Call the OCR Document API to scan text from an image file
 
-    var hodApp = hodClient.hodApps.OCR_DOCUMENT;
+    var hodApp = hodClient.hodApps.OCR_DOCUMENT
     var params =  Dictionary<String,Object>()
     params["file"] = "full/path/filename.jpg"
     params["mode"] = "document_photo"
@@ -162,7 +162,7 @@ HODClient class exposes source code so you can modify it as you wish.
         if let unwrappedError = jsonError {
             println("json error: \(unwrappedError)")
         } else {
-            var jobId = json.valueForKey("jobID") as! String;
+            var jobId = json.valueForKey("jobID") as! String
             hodClient.GetJobResult(jobId);
         }  
     }
@@ -197,7 +197,7 @@ HODClient class exposes source code so you can modify it as you wish.
         if let unwrappedError = jsonError {
             println("json error: \(unwrappedError)")
         } else {
-            var jobId = json.valueForKey("jobID") as! String;
+            var jobId = json.valueForKey("jobID") as! String
             hodClient.GetJobResult(jobId);
         }  
     }

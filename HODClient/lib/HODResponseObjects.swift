@@ -32,7 +32,6 @@ public class HODErrorObject:NSObject
         }
     }
 }
-//}
 
 /************************************************************/
 //////////////////////////////////////////////////////////////
@@ -57,6 +56,8 @@ public class SpeechRecognitionResponse : NSObject{
     public class Document:NSObject {
         var offset:Int64 = 0
         var content:String = ""
+        var confidence:Double = 0.0
+        var duration:Int = 0
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {

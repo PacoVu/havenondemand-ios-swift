@@ -226,7 +226,7 @@ When you call the GetRequest() or PostRequest() with the ASYNC mode, the respons
 # 
 When you call the GetRequest() or PostRequest() with the SYNC mode or call the GetJobResult() function, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
 
-    func requestCompletedWithContent(response:String)
+    func requestCompletedWithContent(var response:String)
     { 
     
     }
@@ -258,7 +258,7 @@ If there is an error occurred, the error message will be returned to this callba
 ----
 **Function ParseJobID**
 
-    ParseJobID(jsonStr:String) -> String
+    ParseJobID(jsonStr:String) -> String?
 
 *Description:* 
 
@@ -270,31 +270,30 @@ If there is an error occurred, the error message will be returned to this callba
 
 *Returned value:*
 
-* The jobID or an empty string if not found.
+* The jobID or nil if not found.
 
 *Example code:*
 ## 
     func requestCompletedWithJobID(response:String) {
-        var jobId:String = hodParser.ParseJobID(response)
-        if jobId.characters.count > 0 {
-            hodClient.GetJobStatus(jobId)
+        let jobID : String? = hodParser.ParseJobID(response)
+        if jobID != nil {
+            hodClient.GetJobStatus(jobID!)
         }
     }
 
 ----
-**Function ParseStandardResponse**
+**Function ParseSpeechRecognitionResponse**
 
-    ParseStandardResponse(hodApp:String, jsonStr:String) -> AnyObject?
+    ParseSpeechRecognitionResponse(&jsonStr) -> SpeechRecognitionResponse?
 
 *Description:* 
 
-* Parses a json string and returns an object type based on the hodApp name.
+* Parses a json response from Haven OnDemand Speech Recognition API and returns a SpeechRegconitionResponse object.
 
->Note: Only APIs which return standard responses can be parsed by using this function. A list of supported APIs can be found from the StandardResponse class. All supported standard response classes are listed at the end of this document.
+>Note: See the full list of standard parser functions from the Standard response parser functions section at the end of this document.
 
 *Parameters:* 
 
-* hodApp: a string identify an HOD API. Supported APIs' standard responses are defined in the StandardResponse class. E.g. StandardResponse.RECOGNIZE_SPEECH.
 * jsonStr: a json string returned from a synchronous API call or from the GetJobResult() or GetJobStatus() function.
 
 *Returned value:*
@@ -303,8 +302,8 @@ If there is an error occurred, the error message will be returned to this callba
 
 *Example code:*
 ## 
-    func requestCompletedWithContent(response:String) {
-        if let resp = (hodParser.ParseStandardResponse(StandardResponse.ANALYZE_SENTIMENT, jsonStr: response) as? SentimentAnalysisResponse) {
+    func requestCompletedWithContent(var response:String) {
+        if let resp = (hodParser.ParseSentimentAnalysisResponse(&response)) {
             var result = "Positive:\n"
             for item in resp.positive {
                 let i  = item as! SentimentAnalysisResponse.Entity
@@ -355,7 +354,7 @@ If there is an error occurred, the error message will be returned to this callba
 ----
 **Function ParseCustomResponse**
 
-    ParseCustomResponse(jsonStr:String) -> NSDictionary?
+    ParseCustomResponse(inout jsonStr:String) -> NSDictionary?
 
 *Description:* 
 
@@ -506,8 +505,8 @@ If there is an error occurred, the error message will be returned to this callba
         }
     }
     // parse json string to a custom data object
-    func requestCompletedWithContent(response:String) {
-        if let dic = hodParser.ParseCustomResponse(jsonData) {
+    func requestCompletedWithContent(var response:String) {
+        if let dic = hodParser.ParseCustomResponse(&jsonData) {
             let obj = EntityExtractionResponse(json:dic)
             var result: String = ""
             for ent in obj.entities as NSArray as! [EntityExtractionResponse.Entity] {
@@ -587,7 +586,9 @@ If there is an error occurred, the error message will be returned to this callba
     class MyAppClass : HODClientDelegate { 
         var hodClient:HODClient = HODClient(apiKey: "your-api-key")
         hodClient.delegate = self
-
+        var hodParser:HODResponseParser = HODResponseParser()
+        var hodApp = ""
+        
         func useHODClient() {
             var hodApp = hodClient.hodApps.ENTITY_EXTRACTION
             var params =  Dictionary<String,Object>()
@@ -600,31 +601,39 @@ If there is an error occurred, the error message will be returned to this callba
         }
 
         // implement delegated functions
-        func requestCompletedWithContent(response:String){
-            var resStr = response.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            var jsonError: NSError?
-            let data = (resStr as NSString).dataUsingEncoding(NSUTF8StringEncoding)
-            let json = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: &jsonError) as! NSDictionary
-            
-            var people = ""
-            var places = ""
-            if let entities = json["entities"] as? NSArray {
-                for entity in entities {
-                    var type = entity.valueForKey("type") as! String
-                    if type == "people_eng" {
-                        var normalizedText = entity.valueForKey("normalized_text") as! String
-                        people += normalizedText + "\n"
+        func requestCompletedWithContent(var response:String){
+            if let dic = hodParser.ParseCustomResponse(&response) {
+                let obj = EntityExtractionResponse(json:dic)
+                var people = ""
+                var places = ""
+                for ent in obj.entities as NSArray as! [EntityExtractionResponse.Entity] {           
+                    if ent.type == "people_eng" {
+                        people += ent.normalized_text + "\n"
                         // parse any other interested information about this person ...
                     }
                     else if type == "places_eng" {
-                        var normalizedText = entity.valueForKey("normalized_text") as! String
-                        places += normalizedText + "\n"
+                        places += ent.normalized_text + "\n"
                         // parse any other interested information about this place ...
-                    }
+                    }     
                 }
+                
+            } else {
+                checkErrorInResponse()
             }
         }
-
+        func checkErrorInResponse() {
+            let errors = hodParser.GetLastError()
+            var errorStr = ""
+            for error in errors {
+                let err = error as! HODErrorObject
+                errorStr = "Error code: " + String(format: "%d", err.error) + "\n"
+                errorStr += "Error reason: " + err.reason + "\n"
+                errorStr += "Error detail: " + err.detail + "\n"
+                errorStr += "Error jobID: " + err.jobID + "\n"
+            }
+            println(errorStr)
+        }
+        
         func onErrorOccurred(errorMessage:String){ 
             // handle error if any
         }
@@ -656,13 +665,13 @@ If there is an error occurred, the error message will be returned to this callba
         * the jobID and send a request for the actual content identified by the jobID.
         **************************************************************************************/ 
         func requestCompletedWithJobID(response:String){ 
-            var jobID:String = hodParser.ParseJobID(response)
-            if jobID.characters.count > 0 {
-                hodClient.GetJobStatus(jobID)
+            let jobID:String? = hodParser.ParseJobID(response)
+            if jobID != nil {
+                hodClient.GetJobStatus(jobID!)
             }
         }
-        func requestCompletedWithContent(response:String){
-            if let resp = (hodParser.ParseStandardResponse(app!, jsonStr: response) as? OCRDocumentResponse) {
+        func requestCompletedWithContent(var response:String){
+            if let resp = (hodParser.ParseOCRDocumentResponse(&response)) {
                 var result = "Scanned text:\n"
                 for item in resp.text_block {
                     let i  = item as! OCRDocumentResponse.TextBlock
@@ -700,55 +709,55 @@ If there is an error occurred, the error message will be returned to this callba
 
 ----
 
-## Standard response classes
+## Standard response parser functions
 ```
-SpeechRecognitionResponse
-CancelConnectorScheduleResponse
-ConnectorHistoryResponse
-ConnectorStatusResponse
-CreateConnectorResponse
-DeleteConnectorResponse
-RetrieveConnectorConfigurationFileResponse
-RetrieveConnectorConfigurationAttrResponse
-StartConnectorResponse
-StopConnectorResponse
-UpdateConnectorResponse
-ExpandContainerResponse
-StoreObjectResponse
-ViewDocumentResponse
-GetCommonNeighborsResponse
-GetNeighborsResponse
-GetNodesResponse
-GetShortestPathResponse
-GetSubgraphResponse
-SuggestLinksResponse
-SummarizeGraphResponse
-OCRDocumentResponse
-RecognizeBarcodesResponse
-RecognizeImagesResponse
-DetectFacesResponse
-PredictResponse
-RecommendResponse
-TrainPredictorResponse
-CreateQueryProfileResponse
-DeleteQueryProfileResponse
-RetrieveQueryProfileResponse
-UpdateQueryProfileResponse
-FindRelatedConceptsResponse
-AutoCompleteResponse
-ExtractConceptsResponse
-ExpandTermsResponse
-HighlightTextResponse
-IdentifyLanguageResponse
-TokenizeTextResponse
-SentimentAnalysisResponse
-AddToTextIndexResponse
-CreateTextIndexResponse
-DeleteTextIndexResponse
-DeleteFromTextIndexResponse
-IndexStatusResponse
-ListResourcesResponse
-RestoreTextIndexResponse
+ParseSpeechRecognitionResponse(inout jsonStr:String) -> SpeechRecognitionResponse?
+ParseCancelConnectorScheduleResponse(inout jsonStr:String) -> CancelConnectorScheduleResponse?
+ParseConnectorHistoryResponse(inout jsonStr:String) -> ConnectorHistoryResponse?
+ParseConnectorStatusResponse(inout jsonStr:String) -> ConnectorStatusResponse?
+ParseCreateConnectorResponse(inout jsonStr:String) -> CreateConnectorResponse?
+ParseDeleteConnectorResponse(inout jsonStr:String) -> DeleteConnectorResponse?
+ParseRetrieveConnectorConfigurationFileResponse(inout jsonStr:String) -> RetrieveConnectorConfigurationFileResponse?
+ParseRetrieveConnectorConfigurationAttrResponse(inout jsonStr:String) -> RetrieveConnectorConfigurationAttrResponse?
+ParseStartConnectorResponse(inout jsonStr:String) -> StartConnectorResponse?
+ParseStopConnectorResponse(inout jsonStr:String) -> StopConnectorResponse?
+ParseUpdateConnectorResponse(inout jsonStr:String) -> ConnectorResponse?
+ParseExpandContainerResponse(inout jsonStr:String) -> ExpandContainerResponse?
+ParseStoreObjectResponse(inout jsonStr:String) -> StoreObjectResponse?
+ParseViewDocumentResponse(inout jsonStr:String) -> ViewDocumentResponse?
+ParseGetCommonNeighborsResponse(inout jsonStr:String) -> GetCommonNeighborsResponse?
+ParseGetNeighborsResponse(inout jsonStr:String) -> GetNeighborsResponse?
+ParseGetNodesResponse(inout jsonStr:String) -> GetNodesResponse?
+ParseGetShortestPathResponse(inout jsonStr:String) -> GetShortestPathResponse?
+ParseGetSubgraphResponse(inout jsonStr:String) -> GetSubgraphResponse?
+ParseSuggestLinksResponse(inout jsonStr:String) -> SuggestLinksResponse?
+ParseSummarizeGraphResponse(inout jsonStr:String) -> SummarizeGraphResponse?
+ParseOCRDocumentResponse(inout jsonStr:String) -> OCRDocumentResponse?
+ParseRecognizeBarcodesResponse(inout jsonStr:String) -> RecognizeBarcodesResponse?
+ParseRecognizeImagesResponse(inout jsonStr:String) -> RecognizeImagesResponse?
+ParseDetectFacesResponse(inout jsonStr:String) -> DetectFacesResponse?
+ParsePredictResponse(inout jsonStr:String) -> PredictResponse?
+ParseRecommendResponse(inout jsonStr:String) -> RecommendResponse?
+ParseTrainPredictorResponse(inout jsonStr:String) -> TrainPredictorResponse?
+ParseCreateQueryProfileResponse(inout jsonStr:String) -> CreateQueryProfileResponse?
+ParseDeleteQueryProfileResponse(inout jsonStr:String) -> DeleteQueryProfileResponse?
+ParseRetrieveQueryProfileResponse(inout jsonStr:String) -> RetrieveQueryProfileResponse?
+ParseUpdateQueryProfileResponse(inout jsonStr:String) -> UpdateQueryProfileResponse?
+ParseFindRelatedConceptsResponse(inout jsonStr:String) -> FindRelatedConceptsResponse?
+ParseAutoCompleteResponse(inout jsonStr:String) -> AutoCompleteResponse?
+ParseExtractConceptsResponse(inout jsonStr:String) -> ExtractConceptsResponse?
+ParseExpandTermsResponse(inout jsonStr:String) -> ExpandTermsResponse?
+ParseHighlightTextResponse(inout jsonStr:String) -> HighlightTextResponse?
+ParseIdentifyLanguageResponse(inout jsonStr:String) -> IdentifyLanguageResponse?
+ParseTokenizeTextResponse(inout jsonStr:String) -> TokenizeTextResponse?
+ParseSentimentAnalysisResponse(inout jsonStr:String) -> SentimentAnalysisResponse?
+ParseAddToTextIndexResponse(inout jsonStr:String) -> AddToTextIndexResponse?
+ParseCreateTextIndexResponse(inout jsonStr:String) -> CreateTextIndexResponse?
+ParseDeleteTextIndexResponse(inout jsonStr:String) -> DeleteTextIndexResponse?
+ParseDeleteFromTextIndexResponse(inout jsonStr:String) -> DeleteFromTextIndexResponse?
+ParseIndexStatusResponse(inout jsonStr:String) -> IndexStatusResponse?
+ParseListResourcesResponse(inout jsonStr:String) -> ListResourcesResponse?
+ParseRestoreTextIndexResponse(inout jsonStr:String) -> RestoreTextIndexResponse?
 ```
 
 ## License

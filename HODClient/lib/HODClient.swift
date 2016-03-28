@@ -286,6 +286,9 @@ struct HODApps {
     static let SUGGEST_LINKS = "suggestlinks"
     static let SUMMARIZE_GRAPH = "summarizegraph"
     
+    static let ANOMALY_DETECTION = "anomalydetection"
+    static let TREND_ANALYSIS = "trendanalysis"
+    
     static let CREATE_CLASSIFICATION_OBJECTS = "createclassificationobjects"
     static let CREATE_POLICY_OBJECTS = "createpolicyobjects"
     static let DELETE_CLASSIFICATION_OBJECTS = "deleteclassificationobjects"

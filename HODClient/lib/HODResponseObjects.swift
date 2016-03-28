@@ -18,16 +18,8 @@ public class HODErrorObject:NSObject
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            } else if let _ = value as? Double {
-                keyValue = (value as? Double)!
-            }
-            if keyValue != nil {
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -62,16 +54,8 @@ public class SpeechRecognitionResponse : NSObject{
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Int {
-                    keyValue = (value as? Int)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -90,16 +74,8 @@ public class CancelConnectorScheduleResponse:NSObject {
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            } else if let _ = value as? Bool {
-                keyValue = (value as? Bool)!
-            }
-            if keyValue != nil {
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -143,33 +119,21 @@ public class ConnectorHistoryResponse:NSObject {
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.document_counts = Document_counts(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
         }
-
     }
-    public class Document_counts:NSObject
-    {
+    public class Document_counts:NSObject {
         var added: Int = 0
         var deleted: Int = 0
         var errors: Int = 0
@@ -180,14 +144,8 @@ public class ConnectorHistoryResponse:NSObject {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Int {
-                    keyValue = (value as? Int)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -209,23 +167,16 @@ public class ConnectorStatusResponse:NSObject {
     var process_start_time: String = ""
     var start_time: String = ""
     var queued_time: String = ""
-    var time_in_queue: Double = 0
-    var time_processing: Double = 0
+    var time_in_queue: Int64 = 0
+    var time_processing: Int64 = 0
     var token: String = ""
     var schedule: Schedule?
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            var isDictionary = false
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            } else if let _ = value as? Double {
-                keyValue = (value as? Double)!
-            } else if let _ = value as? NSDictionary {
+            if let _ = value as? NSDictionary {
                 let keyValue:NSDictionary = (value as? NSDictionary)!
-                isDictionary = true
                 if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                     if keyName == "document_counts" {
                         self.document_counts = Document_counts(json:keyValue)
@@ -233,12 +184,9 @@ public class ConnectorStatusResponse:NSObject {
                         self.schedule = Schedule(json:keyValue)
                     }
                 }
-            }
-            if !isDictionary {
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+            } else {
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -255,14 +203,8 @@ public class ConnectorStatusResponse:NSObject {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Int {
-                    keyValue = (value as? Int)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -276,14 +218,8 @@ public class ConnectorStatusResponse:NSObject {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -301,27 +237,17 @@ public class CreateConnectorResponse:NSObject {
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            var isDictionary = false
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            } else if let _ = value as? Double {
-                keyValue = (value as? Double)!
-            } else if let _ = value as? NSDictionary {
+            if let _ = value as? NSDictionary {
                 let keyValue:NSDictionary = (value as? NSDictionary)!
-                isDictionary = true
                 if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                     if keyName == "download_link" {
                         self.download_link = Download_link(json:keyValue)
                     }
                 }
-            }
-            if !isDictionary {
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+            } else {
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -337,14 +263,8 @@ public class CreateConnectorResponse:NSObject {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -361,18 +281,9 @@ public class DeleteConnectorResponse:NSObject {
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            } else if let _ = value as? Bool {
-                keyValue = (value as? Bool)!
-            }
-            if keyValue != nil {
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -384,7 +295,6 @@ public class DeleteConnectorResponse:NSObject {
 //////////////////////////////////////////////////////////////
 /************************************************************/
 public class RetrieveConnectorConfigurationFileResponse:NSObject {
-    
     var name: String = ""
     var flavor: String = ""
     var config: String = ""
@@ -394,16 +304,9 @@ public class RetrieveConnectorConfigurationFileResponse:NSObject {
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            }
-            if keyValue != nil {
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -415,32 +318,23 @@ public class RetrieveConnectorConfigurationFileResponse:NSObject {
 //////////////////////////////////////////////////////////////
 /************************************************************/
 public class RetrieveConnectorConfigurationAttrResponse:NSObject {
-    
     var name: String = ""
     var flavor: String = ""
     var config: Config!
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            var isDictionary = false
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            } else if let _ = value as? NSDictionary {
+            if let _ = value as? NSDictionary {
                 let keyValue:NSDictionary = (value as? NSDictionary)!
-                isDictionary = true
                 if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                     if keyName == "config" {
                         self.config = Config(json:keyValue)
                     }
                 }
-            }
-            if !isDictionary {
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+            } else {
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -456,14 +350,9 @@ public class RetrieveConnectorConfigurationAttrResponse:NSObject {
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 var keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         if keyName == "config" {
                             self.config = ConfigObj(json:keyValue)
@@ -477,15 +366,12 @@ public class RetrieveConnectorConfigurationAttrResponse:NSObject {
                             self.credentials_policy = CredentialsPolicy(json:keyValue)
                         }
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if keyName == "description" {
-                            keyName = "_description"
-                        }
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if keyName == "description" {
+                        keyName = "_description"
+                    }
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -499,18 +385,9 @@ public class RetrieveConnectorConfigurationAttrResponse:NSObject {
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Int64 {
-                    keyValue = (value as? Int)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -523,14 +400,8 @@ public class RetrieveConnectorConfigurationAttrResponse:NSObject {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -559,18 +430,9 @@ public class RetrieveConnectorConfigurationAttrResponse:NSObject {
             init(json:NSDictionary) {
                 super.init()
                 for (key, value) in json {
-                    
                     let keyName:String = (key as? String)!
-                    var keyValue:AnyObject?
-                    if let _ = value as? String {
-                        keyValue = (value as? String)!
-                    } else if let _ = value as? Int64 {
-                        keyValue = (value as? Int)!
-                    }
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -583,16 +445,9 @@ public class RetrieveConnectorConfigurationAttrResponse:NSObject {
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -603,16 +458,9 @@ public class RetrieveConnectorConfigurationAttrResponse:NSObject {
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -630,16 +478,9 @@ public class StartConnectorResponse:NSObject {
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            }
-            if keyValue != nil {
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -655,16 +496,9 @@ public class StopConnectorResponse:NSObject {
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            }
-            if keyValue != nil {
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -680,16 +514,9 @@ public class UpdateConnectorResponse:NSObject {
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            }
-            if keyValue != nil {
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -724,14 +551,8 @@ public class ExpandContainerResponse:NSObject {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -748,14 +569,8 @@ public class StoreObjectResponse:NSObject {
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            }
-            if keyValue != nil {
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -771,14 +586,8 @@ public class ViewDocumentResponse:NSObject {
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            }
-            if keyValue != nil {
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -812,31 +621,19 @@ public class GetCommonNeighborsResponse:NSObject
         var attributes:Attributes!
         var id:Int64 = 0
         var commonality: Int64 = 0
-        var sort_value:Double = 0
+        var sort_value:Int = 0
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Int64 {
-                    keyValue = (value as? Int)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.attributes = Attributes(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -849,14 +646,8 @@ public class GetCommonNeighborsResponse:NSObject
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -925,25 +716,15 @@ public class GetNeighborsResponse:NSObject
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Int64 {
-                    keyValue = (value as? Int)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.attributes = Attributes(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -956,14 +737,8 @@ public class GetNeighborsResponse:NSObject
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -975,23 +750,15 @@ public class GetNeighborsResponse:NSObject
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Int64 {
-                    keyValue = (value as? Int)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.attributes = Attributes(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1029,25 +796,15 @@ public class GetNodesResponse:NSObject
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Int64 {
-                    keyValue = (value as? Int)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.attributes = Attributes(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1060,14 +817,8 @@ public class GetNodesResponse:NSObject
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1111,23 +862,15 @@ public class GetShortestPathResponse:NSObject
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Int64 {
-                    keyValue = (value as? Int)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.attributes = Attributes(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1141,14 +884,8 @@ public class GetShortestPathResponse:NSObject
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1161,23 +898,15 @@ public class GetShortestPathResponse:NSObject
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Int64 {
-                    keyValue = (value as? Int)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.attributes = Attributes(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1222,23 +951,15 @@ public class GetSubgraphResponse:NSObject
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Int64 {
-                    keyValue = (value as? Int)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.attributes = Attributes(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1252,14 +973,8 @@ public class GetSubgraphResponse:NSObject
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1272,23 +987,15 @@ public class GetSubgraphResponse:NSObject
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Int64 {
-                    keyValue = (value as? Int)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.attributes = Attributes(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1352,23 +1059,15 @@ public class SuggestLinksResponse:NSObject
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Int64 {
-                    keyValue = (value as? Int)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.attributes = Attributes(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1382,14 +1081,8 @@ public class SuggestLinksResponse:NSObject
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1403,25 +1096,15 @@ public class SuggestLinksResponse:NSObject
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? Int64 {
-                    keyValue = (value as? Int)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.attributes = Attributes(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1441,14 +1124,9 @@ public class SummarizeGraphResponse:NSObject
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            var isDictionary = false
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? Int64 {
-                keyValue = (value as? Int)!
-            } else if let _ = value as? NSArray {
+            if let _ = value as? NSArray {
                 let keyValue:NSArray = (value as? NSArray)!
-                isDictionary = true
                 if keyName == "attributes" {
                     for item in keyValue {
                         if (self.respondsToSelector(NSSelectorFromString(keyName))) {
@@ -1457,12 +1135,9 @@ public class SummarizeGraphResponse:NSObject
                         }
                     }
                 }
-            }
-            if !isDictionary {
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+            } else {
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1477,16 +1152,8 @@ public class SummarizeGraphResponse:NSObject
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Int {
-                    keyValue = (value as? Int)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1526,16 +1193,8 @@ public class OCRDocumentResponse:NSObject {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1577,25 +1236,15 @@ public class RecognizeBarcodesResponse:NSObject {
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.additional_information = AdditionalInformation(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1609,14 +1258,8 @@ public class RecognizeBarcodesResponse:NSObject {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1654,28 +1297,18 @@ public class RecognizeImagesResponse : NSObject{
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                } else if let _ = value as? NSArray {
+                if let _ = value as? NSArray {
                     let keyValue:NSArray = (value as? NSArray)!
-                    isDictionary = true
                     for item in keyValue {
                         if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                             let c = Corners(json:item as! NSDictionary)
                             self.corners.addObject(c)
                         }
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1688,16 +1321,8 @@ public class RecognizeImagesResponse : NSObject{
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1739,25 +1364,15 @@ public class DetectFacesResponse : NSObject {
         init(json: NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                } else if let _ = value as? NSDictionary {
+                if let _ = value as? NSDictionary {
                     let keyValue:NSDictionary = (value as? NSDictionary)!
-                    isDictionary = true
                     if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                         self.additional_information = AdditionalInformation(json:keyValue)
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1769,10 +1384,8 @@ public class DetectFacesResponse : NSObject {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                if let keyValue:String = (value as? String) {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1816,16 +1429,8 @@ public class PredictResponse:NSObject {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1857,8 +1462,8 @@ public class PredictResponse:NSObject {
 /************************************************************/
 public class RecommendResponse:NSObject
 {
-    public var allRecommendations:NSMutableArray = []
-    public var fields:NSMutableArray = []
+    var allRecommendations:NSMutableArray = []
+    var fields:NSMutableArray = []
     init(json : NSDictionary) {
         super.init()
         for (key, value) in json {
@@ -1913,28 +1518,18 @@ public class RecommendResponse:NSObject
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
-                var isDictionary = false
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                } else if let _ = value as? NSArray {
+                if let _ = value as? NSArray {
                     let keyValue:NSArray = (value as? NSArray)!
-                    isDictionary = true
                     for item in keyValue {
                         if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                             let c = item as! String
                             self.recommendation.addObject(c)
                         }
                     }
-                }
-                if !isDictionary {
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -1949,16 +1544,8 @@ public class RecommendResponse:NSObject
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Int {
-                    keyValue = (value as? Int)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -1978,12 +1565,8 @@ public class TrainPredictorResponse:NSObject
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -2002,12 +1585,8 @@ public class CreateQueryProfileResponse:NSObject
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -2026,12 +1605,8 @@ public class DeleteQueryProfileResponse:NSObject
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -2057,16 +1632,9 @@ public class RetrieveQueryProfileResponse:NSObject
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            var isDictionary = false
             var keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            } else if let _ = value as? Bool {
-                keyValue = (value as? Bool)!
-            } else if let _ = value as? NSArray {
+            if let _ = value as? NSArray {
                 let keyValue:NSArray = (value as? NSArray)!
-                isDictionary = true
                 if keyName == "promotion_categories" {
                     for item in keyValue {
                         if (self.respondsToSelector(NSSelectorFromString(keyName))) {
@@ -2089,15 +1657,12 @@ public class RetrieveQueryProfileResponse:NSObject
                         }
                     }
                 }
-            }
-            if !isDictionary {
-                if keyValue != nil {
-                    if keyName == "description" {
-                        keyName = "_description"
-                    }
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+            } else {
+                if keyName == "description" {
+                    keyName = "_description"
+                }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -2117,12 +1682,8 @@ public class UpdateQueryProfileResponse:NSObject
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -2153,25 +1714,17 @@ public class FindRelatedConceptsResponse:NSObject
     }
     public class Entities:NSObject
     {
-        var cluster:Double = 0
-        var docs_with_all_terms:Double = 0
-        var docs_with_phrase:Double = 0
-        var occurrences:Double = 0
+        var cluster:Int64 = 0
+        var docs_with_all_terms:Int64 = 0
+        var docs_with_phrase:Int64 = 0
+        var occurrences:Int64 = 0
         var text:String = ""
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -2229,21 +1782,13 @@ public class ExtractConceptsResponse:NSObject
     public class Concepts:NSObject
     {
         var concept:String = ""
-        var occurrences:Double = 0
+        var occurrences:Int64 = 0
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -2275,22 +1820,14 @@ public class ExpandTermsResponse:NSObject
     }
     public class Terms:NSObject
     {
-        var documents:Double = 0
+        var documents:Int64 = 0
         var term:String = ""
         init(json:NSDictionary) {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -2309,12 +1846,8 @@ public class HighlightTextResponse:NSObject
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -2334,16 +1867,9 @@ public class IdentifyLanguageResponse:NSObject
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            var isDictionary = false
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            } else if let _ = value as? Bool {
-                keyValue = (value as? Bool)!
-            } else if let _ = value as? NSArray {
+            if let _ = value as? NSArray {
                 let keyValue:NSArray = (value as? NSArray)!
-                isDictionary = true
                 if keyName == "unicode_scripts" {
                     for item in keyValue {
                         if (self.respondsToSelector(NSSelectorFromString(keyName))) {
@@ -2352,12 +1878,9 @@ public class IdentifyLanguageResponse:NSObject
                         }
                     }
                 }
-            }
-            if !isDictionary {
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+            } else {
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -2402,19 +1925,11 @@ public class TokenizeTextResponse:NSObject
             super.init()
             for (key, value) in json {
                 var keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
+                if keyName == "case" {
+                    keyName = "_case"
                 }
-                if keyValue != nil {
-                    if keyName == "case" {
-                        keyName = "_case"
-                    }
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -2468,16 +1983,8 @@ class SentimentAnalysisResponse:NSObject
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyValue = (value as? Double)!
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -2496,16 +2003,8 @@ class SentimentAnalysisResponse:NSObject
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyVal:AnyObject!
-                if let _ = value as? String {
-                    keyVal = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyVal = (value as? Double)!
-                }
-                if keyVal != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyVal, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -2524,14 +2023,9 @@ public class AddToTextIndexResponse:NSObject
     init(json:NSDictionary) {
         super.init()
         for (key, value) in json {
-            var isDictionary = false
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-            } else if let _ = value as? NSArray {
+            if let _ = value as? NSArray {
                 let keyValue:NSArray = (value as? NSArray)!
-                isDictionary = true
                 if keyName == "references" {
                     for item in keyValue {
                         if (self.respondsToSelector(NSSelectorFromString(keyName))) {
@@ -2540,34 +2034,23 @@ public class AddToTextIndexResponse:NSObject
                         }
                     }
                 }
-            }
-            if !isDictionary {
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
+            } else {
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
     }
     public class References:NSObject
     {
-        var id:Double = 0
+        var id:Int64 = 0
         var reference:String = ""
         init(json: NSDictionary) {
             super.init()
             for (key, value) in json {
                 let keyName:String = (key as? String)!
-                var keyVal:AnyObject!
-                if let _ = value as? String {
-                    keyVal = (value as? String)!
-                } else if let _ = value as? Double {
-                    keyVal = (value as? Double)!
-                }
-                if keyVal != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyVal, forKey: keyName)
-                    }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -2588,12 +2071,8 @@ public class CreateTextIndexResponse:NSObject
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? String {
-                keyValue = (value as? String)!
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyValue, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -2613,16 +2092,10 @@ public class DeleteTextIndexResponse:NSObject
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyVal:AnyObject!
-            if let _ = value as? String {
-                keyVal = (value as? String)!
-            } else if let _ = value as? Bool {
-                keyVal = (value as? Bool)!
-            }
-            if keyVal != nil {
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyVal, forKey: keyName)
-                }
+            
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
+            
             }
         }
     }
@@ -2641,21 +2114,11 @@ public class DeleteFromTextIndexResponse:NSObject
         super.init()
         for (key, value) in json {
             let keyName:String = (key as? String)!
-            var keyVal:AnyObject!
-            if let _ = value as? String {
-                keyVal = (value as? String)!
-            } else if let _ = value as? Double {
-                keyVal = (value as? Double)!
-            }
-            if keyVal != nil {
-                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                    self.setValue(keyVal, forKey: keyName)
-                }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
-
-    
 }
 //////////////////////----------------////////////////////////
 
@@ -2673,17 +2136,11 @@ public class IndexStatusResponse:NSObject
         super.init()
         for (key, value) in json {
             var keyName:String = (key as? String)!
-            var keyValue:AnyObject?
-            if let _ = value as? Double {
-                keyValue = (value as? Double)!
-                if keyName == "24hr_index_updates" {
-                    keyName = "_24hr_index_updates"
-                }
-                if keyValue != nil {
-                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                        self.setValue(keyValue, forKey: keyName)
-                    }
-                }
+            if keyName == "24hr_index_updates" {
+                keyName = "_24hr_index_updates"
+            }
+            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                self.setValue(value, forKey: keyName)
             }
         }
     }
@@ -2727,12 +2184,13 @@ public class ListResourcesResponse:NSObject
         var type:String = ""
         var display_name:String = ""
         var resourceUUID:String = ""
+        
         init(json: NSDictionary) {
             super.init()
             for (key, value) in json {
-                var keyName:String = (key as? String)!
                 var keyValue:AnyObject?
                 if let _ = value as? String {
+                    var keyName:String = (key as? String)!
                     keyValue = (value as? String)!
                     if keyName == "description" {
                         keyName = "_description"
@@ -2755,17 +2213,11 @@ public class ListResourcesResponse:NSObject
             super.init()
             for (key, value) in json {
                 var keyName:String = (key as? String)!
-                var keyValue:AnyObject?
-                if let _ = value as? String {
-                    keyValue = (value as? String)!
-                    if keyName == "description" {
-                        keyName = "_description"
-                    }
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
-                    }
+                if keyName == "description" {
+                    keyName = "_description"
+                }
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }
@@ -2789,6 +2241,189 @@ public class RestoreTextIndexResponse:NSObject
                 keyValue = (value as? String)!
                 if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                     self.setValue(keyValue, forKey: keyName)
+                }
+            }
+        }
+    }
+}
+//////////////////////---------------/////////////////////////
+
+/************************************************************/
+//////////////////////////////////////////////////////////////
+/************************************************************/
+public class AnomalyDetectionResponse:NSObject
+{
+    var result:NSMutableArray = []
+    init(json : NSDictionary) {
+        super.init()
+        for (key, value) in json {
+            let keyName:String = (key as? String)!
+            if let _ = value as? NSArray {
+                let keyValue:NSArray = (value as? NSArray)!
+                if keyName == "result" {
+                    for item in keyValue {
+                        let p = Result(json: item as! NSDictionary)
+                        self.result.addObject(p)
+                    }
+                }
+            }
+        }
+    }
+    public class Result:NSObject
+    {
+        var row:Int64 = 0
+        var row_anomaly_score:Double = 0.0
+        var anomalies:NSMutableArray = []
+        init(json: NSDictionary) {
+            super.init()
+            for (key, value) in json {
+                let keyName:String = (key as? String)!
+                if let _ = value as? NSArray {
+                    let keyValue:NSArray = (value as? NSArray)!
+                    if keyName == "anomalies" {
+                        for item in keyValue {
+                            let p = Anomaly(json: item as! NSDictionary)
+                            self.anomalies.addObject(p)
+                        }
+                    }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
+                    }
+                }
+            }
+        }
+    }
+    public class Anomaly:NSObject
+    {
+        var type:String = ""
+        var anomaly_score:Double = 0.0
+        var columns:NSMutableArray = []
+
+        init(json: NSDictionary) {
+            super.init()
+            for (key, value) in json {
+                let keyName:String = (key as? String)!
+                if let _ = value as? NSArray {
+                    let keyValue:NSArray = (value as? NSArray)!
+                    if keyName == "columns" {
+                        for item in keyValue {
+                            let p = Column(json: item as! NSDictionary)
+                            self.columns.addObject(p)
+                        }
+                    }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
+                    }
+                }
+            }
+        }
+    }
+    class Column:NSObject {
+        var column : String = ""
+        var value : String = ""
+        
+        init(json: NSDictionary) {
+            super.init()
+            for (key, value) in json {
+                let keyName:String = (key as? String)!
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
+                }
+            }
+        }
+    }
+}
+//////////////////////----------------////////////////////////
+
+
+/************************************************************/
+//////////////////////////////////////////////////////////////
+/************************************************************/
+public class TrendAnalysisResponse:NSObject
+{
+    var trend_collections:NSMutableArray = []
+    init(json : NSDictionary) {
+        super.init()
+        for (key, value) in json {
+            let keyName:String = (key as? String)!
+            if let _ = value as? NSArray {
+                let keyValue:NSArray = (value as? NSArray)!
+                if keyName == "trend_collections" {
+                    for item in keyValue {
+                        let p = TrendCollection(json: item as! NSDictionary)
+                        self.trend_collections.addObject(p)
+                    }
+                }
+            }
+        }
+    }
+    public class TrendCollection:NSObject
+    {
+        var trends:NSMutableArray = []
+        init(json: NSDictionary) {
+            super.init()
+            for (key, value) in json {
+                let keyName:String = (key as? String)!
+                if let _ = value as? NSArray {
+                    let keyValue:NSArray = (value as? NSArray)!
+                    if keyName == "trends" {
+                        for item in keyValue {
+                            let p = Trend(json: item as! NSDictionary)
+                            self.trends.addObject(p)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public class Trend:NSObject
+    {
+        var trend:String = ""
+        var measure_percentage_main_group:Double = 0.0
+        var measure_value_main_group:Double = 0.0
+        var main_trend:String = ""
+        var score:Double = 0.0
+        var measure_percentage_compared_group:Double = 0.0
+        var measure:NSMutableArray = []
+        var category:NSMutableArray = []
+        
+        init(json: NSDictionary) {
+            super.init()
+            for (key, value) in json {
+                let keyName:String = (key as? String)!
+                if let _ = value as? NSArray {
+                    let keyValue:NSArray = (value as? NSArray)!
+                    if keyName == "category" {
+                        for item in keyValue {
+                            let p = Category(json: item as! NSDictionary)
+                            self.category.addObject(p)
+                        }
+                    } else if keyName == "measure" {
+                        for item in keyValue {
+                            let p = Category(json: item as! NSDictionary)
+                            self.measure.addObject(p)
+                        }
+                    }
+                } else {
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
+                    }
+                }
+            }
+        }
+    }
+    class Category:NSObject {
+        var column : String = ""
+        var value : String = ""
+        
+        init(json: NSDictionary) {
+            super.init()
+            for (key, value) in json {
+                let keyName:String = (key as? String)!
+                if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                    self.setValue(value, forKey: keyName)
                 }
             }
         }

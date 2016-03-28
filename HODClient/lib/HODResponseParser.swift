@@ -819,6 +819,34 @@ class HODResponseParser
         }
         return obj
     }
+    func ParseAnomalyDetectionResponse(inout jsonStr:String) -> AnomalyDetectionResponse?
+    {
+        var obj : AnomalyDetectionResponse!
+        if let result = getResult(&jsonStr) {
+            do {
+                let data1 = (result as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+                let dic = try NSJSONSerialization.JSONObjectWithData(data1!, options: []) as! NSDictionary
+                obj = AnomalyDetectionResponse(json:dic)
+            } catch let error as NSError {
+                logParserError(error)
+            }
+        }
+        return obj
+    }
+    func ParseTrendAnalysisResponse(inout jsonStr:String) -> TrendAnalysisResponse?
+    {
+        var obj : TrendAnalysisResponse!
+        if let result = getResult(&jsonStr) {
+            do {
+                let data1 = (result as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+                let dic = try NSJSONSerialization.JSONObjectWithData(data1!, options: []) as! NSDictionary
+                obj = TrendAnalysisResponse(json:dic)
+            } catch let error as NSError {
+                logParserError(error)
+            }
+        }
+        return obj
+    }
     func ParseCustomResponse(inout jsonStr:String) -> NSDictionary?
     {
         resetErrors()

@@ -405,30 +405,18 @@ If there is an error occurred, the error message will be returned to this callba
             init(json:NSDictionary) {
                 super.init()
                 for (key, value) in json {
-                    var isDictionary = false
                     let keyName:String = (key as? String)!
-                    var keyValue:AnyObject?
-                    if let _ = value as? String {
-                        keyValue = (value as? String)!
-                    } else if let _ = value as? Double {
-                        keyValue = (value as? Double)!
-                    } else if let _ = value as? Int {
-                        keyValue = (value as? Int)!
-                    } else if let _ = value as? NSArray {
+                    if let _ = value as? NSArray {
                         let keyValue:NSArray = (value as? NSArray)!
-                        isDictionary = true
                         for item in keyValue {
                             if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                                 let c = item as! String
                                 self.person_profession.addObject(c)
                             }
                         }
-                    }
-                    if !isDictionary {
-                        if keyValue != nil {
-                            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                                self.setValue(keyValue, forKey: keyName)
-                            }
+                    } else {
+                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                            self.setValue(value, forKey: keyName)
                         }
                     }
                 }
@@ -442,16 +430,8 @@ If there is an error occurred, the error message will be returned to this callba
                 super.init()
                 for (key, value) in json {
                     let keyName:String = (key as? String)!
-                    var keyValue:AnyObject?
-                    if let _ = value as? String {
-                        keyValue = (value as? String)!
-                    } else if let _ = value as? Int64 {
-                        keyValue = (value as? Int)!
-                    }
-                    if keyValue != nil {
-                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                            self.setValue(keyValue, forKey: keyName)
-                        }
+                    if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                        self.setValue(value, forKey: keyName)
                     }
                 }
             }
@@ -468,36 +448,23 @@ If there is an error occurred, the error message will be returned to this callba
             init(json: NSDictionary) {
                 super.init()
                 for (key, value) in json {
-                    var isDictionary = false
                     let keyName:String = (key as? String)!
-                    var keyValue:AnyObject?
-                    if let _ = value as? String {
-                        keyValue = (value as? String)!
-                    } else if let _ = value as? Int {
-                        keyValue = (value as? Int)!
-                    } else if let _ = value as? Double {
-                        keyValue = (value as? Double)!
-                    } else if let _ = value as? NSDictionary {
+                    if let _ = value as? NSDictionary {
                         let keyValue:NSDictionary = (value as? NSDictionary)!
-                        isDictionary = true
                         if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                             self.additional_information = AdditionalInformation(json:keyValue)
                         }
                     } else if let _ = value as? NSArray {
                         let keyValue:NSArray = (value as? NSArray)!
-                        isDictionary = true
                         for item in keyValue {
                             if (self.respondsToSelector(NSSelectorFromString(keyName))) {
                                 let c = Components(json:item as! NSDictionary)
                                 self.components.addObject(c)
                             }
                         }
-                    }
-                    if !isDictionary {
-                        if keyValue != nil {
-                            if (self.respondsToSelector(NSSelectorFromString(keyName))) {
-                                self.setValue(keyValue, forKey: keyName)
-                            }
+                    } else {
+                        if (self.respondsToSelector(NSSelectorFromString(keyName))) {
+                            self.setValue(value, forKey: keyName)
                         }
                     }
                 }
